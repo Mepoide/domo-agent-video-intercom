@@ -10,7 +10,7 @@ This document contains the Epics (engineering contracts) required to build the C
 
 **Execution Prompt:**
 > "Read the `CONTEXT.md` file. Your goal is to set up the video stream and physical event detection on the Raspberry Pi Zero. Create the `/edge_node_pizero/` directory and generate two deliverables:
-> 1. An ultra-lightweight `docker-compose.yml` deploying `bluenviron/mediamtx` to expose the physical camera (`/dev/video0`) as a low-latency RTSP stream. Configure it for a low resolution (640x480) and a maximum of 15 FPS.
+> 1. An ultra-lightweight `docker-compose.yml` deploying `bluenviron/mediamtx` to expose the physical camera (`/dev/video0`) as a low-latency RTSP stream. Configure it for a moderate resolution (e.g., 800x600) and 15-20 FPS.
 > 2. A Python script (`src/doorbell.py`) using the `gpiozero` and `paho-mqtt` libraries. The script must listen to GPIO pin 17 (connected to a physical button with a pull-up resistor). On button press, it must connect to the local MQTT broker (use Node B's IP defined in the context) and publish the message `{"event": "ring"}` to the `outpost/doorbell` topic.
 > 3. Add a `requirements.txt` file."
 
@@ -20,9 +20,9 @@ This document contains the Epics (engineering contracts) required to build the C
 **Recommended Assignment:** Agent Bravo (Edge AI Specialist)
 
 **Execution Prompt:**
-> "Read the `CONTEXT.md` file. Your goal is to configure Frigate on the Pi 3 to leverage the Google Coral without saturating its CPU or its USB 2.0 bus. Create the `/core_node_pi3/` directory and generate these deliverables:
-> 1. A `docker-compose.yml` file that deploys Frigate and Eclipse Mosquitto (MQTT Broker).
-> 2. A `config/frigate.yml` file. Strict constraints: Define the detector as `coral` type `edgetpu` pointing to the USB bus. Configure the camera to consume the RTSP stream from Node A. **Critical limit:** Fix the detection FPS to a maximum of 3 FPS to avoid choking the USB 2.0 connection. Enable tracking exclusively for the `person` class.
+> "Read the `CONTEXT.md` file. Your goal is to configure Frigate on the Coral Dev Board. Create the `/core_node_coral/` directory and generate these deliverables:
+> 1. A `docker-compose.yml` file that deploys Frigate and Eclipse Mosquitto (MQTT Broker). Ensure Frigate has privileged access or the correct device mappings for the PCIe Edge TPU (`/dev/apex_0`).
+> 2. A `config/frigate.yml` file. Strict constraints: Define the detector as `coral` type `edgetpu` pointing to the **PCIe** device. Configure the camera to consume the RTSP stream from Node A. Enable tracking exclusively for the `person` class. Optimize for high performance since the hardware can handle it.
 > 3. A basic `config/mosquitto.conf` file that allows anonymous local network connections (port 1883)."
 
 ---

@@ -5,14 +5,14 @@ A smart, autonomous video intercom system designed for single-family homes. This
 ## 🧠 How it works
 
 Unlike traditional intercoms that only detect "movement", this system understands context. 
-1. **Local Detection:** A Raspberry Pi Zero captures the video feed, and a Pi 3 with a Google Coral Edge TPU filters events in real-time (e.g., confirming it's a *person* and not a passing car).
+1. **Local Detection:** A Raspberry Pi Zero captures the video feed, and a Google Coral Dev Board with a native PCIe Edge TPU filters events in real-time (e.g., confirming it's a *person* and not a passing car).
 2. **Cognitive Analysis:** The **OpenClaw** agent captures the frame and queries the **Google Gemini API**.
 3. **Interaction:** You receive a natural language message (e.g., *"There's a delivery driver with a package at the door"*) and can respond using Text-to-Speech (TTS) directly from Telegram.
 
 ## ⚙️ Hardware Architecture
 
 * **Edge Node (Outdoor):** Raspberry Pi Zero W + Camera Module + USB Mic/Speaker. (Raw video capture and actuators).
-* **Core Node (Indoor):** Raspberry Pi 3 Model B+ + Google Coral USB Accelerator. (NVR processing with Frigate and orchestration with OpenClaw).
+* **Core Node (Indoor):** Google Coral Dev Board 4GB. (High-performance NVR processing with Frigate and orchestration with OpenClaw).
 
 ## 📂 Repository Structure
 
@@ -31,10 +31,10 @@ domo-agent-video-intercom/
 │   │   └── doorbell.py       # Python script for physical doorbell events via MQTT
 │   └── requirements.txt      # Python dependencies (gpiozero, paho-mqtt)
 │
-├── core_node_pi3/            # [Core Node] Frigate NVR and MQTT Broker
+├── core_node_coral/            # [Core Node] Frigate NVR and MQTT Broker
 │   ├── docker-compose.yml    # Deploys Frigate and Mosquitto broker
 │   ├── config/
-│   │   ├── frigate.yml       # Google Coral Edge TPU config (limited to 3 FPS)
+│   │   ├── frigate.yml       # Google Coral Edge TPU config (PCIe optimized, +30 FPS)
 │   │   └── mosquitto.conf    # MQTT broker configuration
 │   └── .env.example          # Template for local credentials
 │
