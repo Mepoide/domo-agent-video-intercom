@@ -1,23 +1,8 @@
-version: '3.8'
-
 services:
   mediamtx:
     image: bluenviron/mediamtx:latest
     container_name: mediamtx
     restart: unless-stopped
-    # Use host network to minimize latency and simplify RTSP exposure (port 8554)
     network_mode: "host"
-    privileged: true
-    devices:
-      - "/dev/video0:/dev/video0"
     environment:
-      # Expose a camera under the path /cam
-      - MTX_PATHS_CAM_SOURCE=rpiCamera
-      - MTX_PATHS_CAM_RPICAMERAWIDTH=800
-      - MTX_PATHS_CAM_RPICAMERAHEIGHT=600
-      - MTX_PATHS_CAM_RPICAMERAFPS=20
-      # Fallback to V4L2 if libcamera (rpiCamera) is not available on older OS versions
-      - MTX_PATHS_CAMV4L2_SOURCE=/dev/video0
-      - MTX_PATHS_CAMV4L2_V4L2WIDTH=800
-      - MTX_PATHS_CAMV4L2_V4L2HEIGHT=600
-      - MTX_PATHS_CAMV4L2_V4L2FRAMERATE=20
+      - MTX_PROTOCOLS=tcp
