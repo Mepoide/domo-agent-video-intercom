@@ -1,0 +1,24 @@
+mqtt:
+  host: mosquitto
+  port: 1883
+  topic_prefix: frigate
+  client_id: frigate
+
+detectors:
+  coral:
+    type: edgetpu
+    device: pci # Correct parameter for the PCIe integrated Edge TPU
+
+cameras:
+  front_door:
+    ffmpeg:
+      inputs:
+        - path: rtsp://192.168.1.95:8554/cam
+          roles:
+            - detect
+            - rtmp
+    detect:
+      enabled: True
+    objects:
+      track:
+        - person
