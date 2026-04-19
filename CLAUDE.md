@@ -19,7 +19,7 @@ A distributed AI-powered video intercom system deployed across two physical node
 
 ### Node B — Core Processing (Indoor Command)
 - **Hardware:** Google Coral Dev Board 4GB (Mendel Linux)
-- **IP:** `192.168.1.100`
+- **IP:** `192.168.1.44`
 - **Role:** AI inference, MQTT broker, Frigate NVR, OpenClaw bridge
 - **Directory:** `core_node_coral/` and `cognitive_agent_openclaw/`
 - **Constraint:** Edge TPU is connected via **PCIe** (`/dev/apex_0`) — never configure it as a USB device.
@@ -31,8 +31,8 @@ A distributed AI-powered video intercom system deployed across two physical node
 | Service        | Host   | Address                          |
 |----------------|--------|----------------------------------|
 | RTSP stream    | Node A | `rtsp://192.168.1.95:8554/cam`   |
-| MQTT broker    | Node B | `mqtt://192.168.1.100:1883`      |
-| Frigate NVR    | Node B | `http://192.168.1.100:5000`      |
+| MQTT broker    | Node B | `mqtt://192.168.1.44:1883`      |
+| Frigate NVR    | Node B | `http://192.168.1.44:5000`      |
 
 **MQTT Topics:**
 - `outpost/doorbell` — published by Node A on physical button press

@@ -12,14 +12,14 @@ This document serves as the ground truth for all engineering agents working on t
 * **Node B (Core Processing - Indoor Command):**
     * **Hardware:** Google Coral Dev Board 4GB (Mendel Linux).
     * **Capabilities:** High-performance Edge AI node. The Edge TPU is integrated via **PCIe**, meaning there are NO USB bottlenecks. This node can comfortably handle high-FPS video decoding and inference. 
-    * **IP Address:** `192.168.1.100` *(Update before deployment)*.
+    * **IP Address:** `192.168.1.44` *(Update before deployment)*.
 
 ## 2. Network Topology & Services
 
 All services communicate over the local LAN to ensure low latency.
 
 * **RTSP Video Stream:** Hosted on Node A via `mediamtx`. Accessible at `rtsp://192.168.1.95:8554/cam`.
-* **MQTT Broker:** Hosted on Node B via Eclipse Mosquitto. Accessible at `mqtt://192.168.1.100:1883`. 
+* **MQTT Broker:** Hosted on Node B via Eclipse Mosquitto. Accessible at `mqtt://192.168.1.44:1883`. 
     * *Topics:* `outpost/doorbell` (Node A publishes), `frigate/events` (Frigate publishes).
 
 ## 3. The Cognitive Pipeline (Data Flow)

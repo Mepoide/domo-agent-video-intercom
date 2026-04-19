@@ -15,7 +15,7 @@ A smart, autonomous video intercom system designed for single-family homes. Comb
 | Node | Device | Role | IP |
 |------|--------|------|----|
 | Node A — Edge Sensor | Raspberry Pi Zero W + OV5647 Camera | RTSP stream + GPIO doorbell | `192.168.1.95` |
-| Node B — Core Processing | Google Coral Dev Board 4GB | Frigate NVR + MQTT + OpenClaw | `192.168.1.100` |
+| Node B — Core Processing | Google Coral Dev Board 4GB | Frigate NVR + MQTT + OpenClaw | `192.168.1.44` |
 
 ---
 
@@ -133,7 +133,7 @@ mdt shell
 #### Deployment (after Mendel is running)
 ```bash
 # Copy files from dev machine
-scp -r core_node_coral mendel@192.168.1.100:/home/mendel/
+scp -r core_node_coral mendel@192.168.1.44:/home/mendel/
 
 # On the Coral board
 cd /home/mendel/core_node_coral

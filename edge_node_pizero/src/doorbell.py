@@ -8,7 +8,7 @@ from gpiozero import Button
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Constants based on architecture context
-MQTT_BROKER = "192.168.1.100"  # Node B IP Address
+MQTT_BROKER = "192.168.1.44"  # Node B IP Address
 MQTT_PORT = 1883
 MQTT_TOPIC = "outpost/doorbell"
 DOORBELL_PIN = 17
