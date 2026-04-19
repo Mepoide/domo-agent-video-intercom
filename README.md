@@ -130,17 +130,49 @@ mdt shell
 # Logs in as user: mendel
 ```
 
-#### Deployment (after Mendel is running)
+#### Post-flash setup
+
+Install Docker CE (the `docker.io` apt package is too old):
+```bash
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+```
+
+#### Deployment
 ```bash
 # Copy files from dev machine
 scp -r core_node_coral mendel@192.168.1.44:/home/mendel/
 
 # On the Coral board
 cd /home/mendel/core_node_coral
-sudo docker-compose up -d
+sudo docker compose up -d
 ```
 
-**Status: Mendel setup in progress.**
+#### Known issues resolved during deployment
+
+| Issue | Root cause | Fix |
+|-------|-----------|-----|
+| `unable to find "net_cls"` | Mendel kernel missing cgroup controller | `network_mode: host` in docker-compose |
+| Frigate using default config | Expected `config.yml`, not `frigate.yml` | Renamed to `config.yml` |
+| MQTT connection refused | No Docker DNS with host networking | `host: localhost` in config.yml |
+| `Failed to load delegate` | Wrong device path for PCIe | `device: pci` (not `/dev/apex_0`) |
+| Segfault with host libedgetpu | ABI mismatch with Frigate's tflite_runtime | Use container's native libedgetpu |
+
+#### Verification
+```bash
+# Check containers are running
+sudo docker ps
+
+# Check Frigate found the Coral TPU (should show "TPU found", no segfault)
+sudo docker logs frigate 2>&1 | grep -E "TPU|edgetpu" | tail -5
+```
+
+Frigate admin credentials are auto-generated on first run — check logs:
+```bash
+sudo docker logs frigate 2>&1 | grep -A2 "default user"
+```
+
+**Status: Epic 2 complete. Frigate running with Coral PCIe TPU detected.**
 
 ---
 
@@ -178,5 +210,5 @@ domo-agent-video-intercom/
 | Epic | Agent | Description | Status |
 |------|-------|-------------|--------|
 | 1 | Alpha | Edge Node: RTSP stream + GPIO doorbell (Pi Zero W) | Complete |
-| 2 | Bravo | Core Node: Frigate + Mosquitto (Coral Dev Board) | Code ready, hardware pending |
+| 2 | Bravo | Core Node: Frigate + Mosquitto (Coral Dev Board) | Complete |
 | 3 | Charlie | OpenClaw: MQTT → Gemini → Telegram | Pending |

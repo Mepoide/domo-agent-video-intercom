@@ -87,7 +87,7 @@ cognitive_agent_openclaw/  # Node B OpenClaw bridge
 | Epic | Agent   | Description                        | Code     | Hardware deployed |
 |------|---------|------------------------------------|----------|-------------------|
 | 1    | Alpha   | Edge Node: RTSP stream + doorbell  | Done     | Done — verified   |
-| 2    | Bravo   | Core Node: Frigate + Mosquitto     | Done     | Pending (Mendel)  |
+| 2    | Bravo   | Core Node: Frigate + Mosquitto     | Done     | Done — verified   |
 | 3    | Charlie | OpenClaw: MQTT → Gemini → Telegram | Pending  | Pending           |
 
 ## Hardware Deployment Notes
@@ -98,12 +98,17 @@ cognitive_agent_openclaw/  # Node B OpenClaw bridge
 - Doorbell: GPIO 17 with internal pull-up (no external resistor needed).
 - RTSP stream verified in VLC at `rtsp://192.168.1.95:8554/cam`.
 
-### Node B — Coral Dev Board (Epic 2) — HARDWARE PENDING
-- Must flash Mendel Linux using the **flashcard** SD image from coral.ai.
-- DIP switches for SD boot: `1=ON, 2=OFF, 3=ON, 4=ON`. After flash: `1=ON, 2=OFF, 3=OFF, 4=OFF`.
-- Coral TPU is PCIe (`/dev/apex_0`) — never configure as USB in Frigate.
-- User has had issues with faulty MicroSD cards — always use a new card for flashing.
-- Full hardware guide in `README.md`.
+### Node B — Coral Dev Board (Epic 2) — COMPLETE
+- Mendel Linux installed, SSH working, IP `192.168.1.44`.
+- Docker CE 26.1.4 installed (not docker.io — too old on Mendel).
+- Frigate 0.17 + Mosquitto running. Coral PCIe TPU detected (`device: pci`).
+- Frigate admin password auto-generated on first run, saved to `/home/mendel/.env.local`.
+- Critical config lessons (see README for full table):
+  - `network_mode: host` — Mendel kernel has no `net_cls` cgroup
+  - Config file must be `config.yml` (not `frigate.yml`)
+  - MQTT host must be `localhost` (no Docker DNS with host networking)
+  - EdgeTPU device string must be `pci` — `/dev/apex_0` causes delegate failure
+  - Do NOT mount host libedgetpu into container — ABI mismatch with Frigate's tflite_runtime
 
 ---
 
