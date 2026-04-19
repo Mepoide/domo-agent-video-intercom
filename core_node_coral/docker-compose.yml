@@ -1,28 +1,24 @@
-version: '3.9'
+version: '3.3'
 
 services:
   frigate:
     container_name: frigate
-    privileged: true # Used in Mendel Linux to ensure full access to /dev/apex_0
+    privileged: true
     restart: unless-stopped
     image: ghcr.io/blakeblackshear/frigate:stable
-    shm_size: "128mb" # Required minimum for Frigate
+    shm_size: "128mb"
+    network_mode: host
     devices:
-      - /dev/apex_0:/dev/apex_0 # The PCIe Edge TPU device
+      - /dev/apex_0:/dev/apex_0
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./config:/config
       - ./storage:/media/frigate
-    ports:
-      - "5000:5000"
-      - "8554:8554"
-      - "8555:8555"
 
   mosquitto:
     container_name: mosquitto
     image: eclipse-mosquitto:latest
     restart: unless-stopped
-    ports:
-      - "1883:1883"
+    network_mode: host
     volumes:
       - ./config/mosquitto.conf:/mosquitto/config/mosquitto.conf
