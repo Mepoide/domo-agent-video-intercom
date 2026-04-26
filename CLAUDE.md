@@ -92,7 +92,16 @@ smoke_test/                # Inter-node connectivity validation
 |------|---------|------------------------------------|----------|-------------------|
 | 1    | Alpha   | Edge Node: RTSP stream + doorbell  | Done     | Done — verified   |
 | 2    | Bravo   | Core Node: Frigate + Mosquitto     | Done     | Done — verified   |
-| 3    | Charlie | OpenClaw: MQTT → Gemini → Telegram | Pending  | Pending           |
+| 3    | Charlie | OpenClaw: MQTT → Gemini → Telegram | Done     | Pending deploy    |
+
+## Epic 3 — Pendiente de deploy
+
+Antes de arrancar `cognitive_agent_openclaw` en Node B se necesitan:
+1. Crear `.env` a partir de `.env.example` con las credenciales reales
+2. `GEMINI_API_KEY` — Google AI Studio
+3. `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` — @BotFather / @userinfobot
+4. `FRIGATE_PASSWORD` — `sudo docker logs frigate 2>&1 | grep -A2 "default user"`
+5. Copiar directorio a Node B y lanzar: `sudo docker compose up -d`
 
 ## Inter-Node Comms — Verified
 
