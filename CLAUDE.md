@@ -69,6 +69,10 @@ cognitive_agent_openclaw/  # Node B OpenClaw bridge
   docker-compose.yml
   requirements.txt
   .env.example             # GEMINI_API_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+
+smoke_test/                # Inter-node connectivity validation
+  node_b_listener.py       # Run on Node B — subscribes to all topics, checks Frigate API
+  node_a_publisher.py      # Run on Node A — publishes test messages, reports results
 ```
 
 ---
@@ -89,6 +93,15 @@ cognitive_agent_openclaw/  # Node B OpenClaw bridge
 | 1    | Alpha   | Edge Node: RTSP stream + doorbell  | Done     | Done — verified   |
 | 2    | Bravo   | Core Node: Frigate + Mosquitto     | Done     | Done — verified   |
 | 3    | Charlie | OpenClaw: MQTT → Gemini → Telegram | Pending  | Pending           |
+
+## Inter-Node Comms — Verified
+
+MQTT communication between Node A and Node B verified via smoke tests (`smoke_test/`):
+- Node A → Node B TCP reachability: OK
+- Node A MQTT publish to `outpost/doorbell`: OK
+- Node B MQTT broker receives messages: OK
+- SSH key-based access configured on both nodes (key: `~/.ssh/id_ed25519`)
+- Node B Python: 3.7 — use `paho-mqtt<2.0`
 
 ## Hardware Deployment Notes
 
