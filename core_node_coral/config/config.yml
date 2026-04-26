@@ -22,3 +22,10 @@ cameras:
     objects:
       track:
         - person
+        - car
+        - truck
+        - motorcycle
+        - bicycle
+        - dog
+        - cat
+        - bird
