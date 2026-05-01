@@ -5,79 +5,51 @@ This document contains the Epics (engineering contracts) required to build the C
 
 ---
 
-## EPIC 0: Hardware Integration (Physical Layer)
-**Recommended Assignment:** Agent Zero (Hardware Integration Engineer)
+## EPIC 0: Physical Hardware Integration (Fermax ↔ Pi Zero)
+**Recommended Assignment:** Human Technician + Agent Alpha review
 
-**Execution Prompt:**
-> "Read the `CONTEXT.md` file. Your goal is to document and implement the physical integration between the Raspberry Pi Zero W and the Fermax CITYMAX 6201 analog intercom system (ref. 8300, 4+N system, 12Vac, power supply ref. 4802). The system is bidirectional: the Pi Zero must detect doorbell presses without disrupting the existing intercom, and must be able to trigger the electric door strike on command."
+**Objective:** Wire the Raspberry Pi Zero bidirectionally to the existing Fermax CITYMAX 6201 intercom (ref. 8300, 4+N analogue system, 12Vac).
 
----
+### Bill of Materials
+| Component | Ref | Est. Cost |
+|---|---|---|
+| Optocoupler PC817 | PC817 | ~€0.50 |
+| Resistor 470Ω 1/4W | - | ~€0.10 |
+| 5V 1-channel relay module (optocoupled) | SRD-05VDC-SL-C | ~€2.00 |
+| Dupont jumper cables | - | ~€1.00 |
 
-### Circuit A — Input: Doorbell Detection (Fermax → Pi Zero)
-
-**Principle:** An optocoupler (PC817) is wired in parallel to the Fermax call terminal. When the visitor presses the button, 12Vac flows through the optocoupler LED, activating the phototransistor, which pulls GPIO 17 LOW. The internal pull-up on the Pi Zero keeps it HIGH at rest. The existing intercom telephone continues to ring normally.
-
-**⚠ Safety:** The PC817 provides galvanic isolation between the 12Vac Fermax circuit and the 3.3V GPIO. **Never connect the Fermax ground (N) to the Pi Zero GND.** Never connect any Fermax terminal directly to a GPIO pin.
-
-```
-  FERMAX PLACA                   PC817 OPTOCOUPLER              PI ZERO W
-  ─────────────                  ┌──────────────────┐           ──────────
-                                 │                  │
-  Terminal llamada ──[470Ω]────►│ A (LED+)  C (BJT)│────────── GPIO 17
-  (~ 12Vac cuando               │                  │           (INPUT, pull-up 3V3)
-   se pulsa el botón)           │                  │
-                                 │ K (LED-)  E (BJT)│────────── GND Pi Zero
-  Masa Fermax (N) ─────────────►│                  │
-                                 └──────────────────┘
-  ↑ Esta masa NO se conecta al GND de la Pi Zero.
-    El PC817 aísla galvánicamente ambos circuitos.
-```
-
-**Comportamiento:** botón pulsado → LED conduce → transistor satura → GPIO 17 = LOW → `doorbell.py` detecta evento y publica a MQTT.
-
----
-
-### Circuit B — Output: Door Release (Pi Zero → Fermax)
-
-**Principle:** A 5V relay module (optocoupled) is driven by GPIO 18. When the relay coil is energised, the Normally-Open (NO) contact closes, shorting the Fermax door-release terminals and triggering the electric strike. The pulse lasts 500 ms — enough to unlatch the door.
-
-**⚠ Safety:** The relay module must be optocoupled (most 1-channel 5V modules from reputable suppliers are). Verify the relay contact is rated for AC loads. Never bridge relay COM and NO before connecting to the Fermax — check with a multimeter first that NO is open at rest.
+### Circuit A — INPUT: Doorbell detection
+Detect when someone presses the Fermax street panel button WITHOUT replacing normal intercom operation.
 
 ```
-  PI ZERO W                      MÓDULO RELÉ 5V 1CH             FERMAX PLACA
-  ─────────                      ┌──────────────────┐           ──────────
-                                 │                  │
-  GPIO 18 (OUTPUT) ────────────►│ IN         NO    │────────── Terminal abrepuertas
-                                 │                  │
-  5V Pi Zero ──────────────────►│ VCC        COM   │────────── Masa Fermax (N)
-                                 │                  │
-  GND Pi Zero ─────────────────►│ GND              │
-                                 └──────────────────┘
-  Pulso: GPIO 18 HIGH (500ms) → relé cierra → cerradura abre → GPIO 18 LOW
+Fermax call terminal (+) ──┬── [470Ω] ── PC817 pin 1 (Anode)
+                           │
+Fermax call terminal (-) ──┴────────── PC817 pin 2 (Cathode)
+
+PC817 pin 4 (Collector) ── GPIO 17 (Pi Zero) + 10kΩ pull-up to 3.3V
+PC817 pin 3 (Emitter)  ── GND (Pi Zero)
 ```
 
----
+⚠️ SAFETY: The PC817 provides galvanic isolation between the 12Vac Fermax system and the 3.3V GPIO. Never connect Fermax terminals directly to GPIO pins.
 
-### Component List
+### Circuit B — OUTPUT: Door release
+Trigger the existing electric door strike via the Fermax opener terminal.
 
-| # | Componente | Referencia / Descripción | Precio aprox. |
-|---|-----------|--------------------------|---------------|
-| 1 | Optoacoplador | PC817 (DIP-4) | ~0.10 €/ud |
-| 2 | Resistencia | 470 Ω, 1/4 W | ~0.02 €/ud |
-| 3 | Módulo relé | 5V, 1 canal, optoacoplado | ~2–3 € |
-| 4 | Cable Dupont | Hembra-hembra, 20 cm | ~0.50 € (pack) |
-| 5 | Cable fino | Para empalmar en bornas Fermax | disponible |
+```
+GPIO 18 (Pi Zero) ── Relay module IN
+Pi Zero 5V        ── Relay module VCC
+Pi Zero GND       ── Relay module GND
 
-**Total estimado: < 5 €** (excluyendo cables de repuesto y Pi Zero W ya instalada)
+Relay NO (Normally Open)  ── Fermax opener terminal A
+Relay COM (Common)        ── Fermax opener terminal B
+```
 
----
+Pulse duration: 500ms (enough to release the electric strike).
+The relay module must be optocoupled to protect the Pi Zero GPIO.
 
-### GPIO Summary — Node A (Pi Zero W)
-
-| Pin | Dirección | Función |
-|-----|-----------|---------|
-| GPIO 17 | INPUT (pull-up) | Detección timbre via PC817 |
-| GPIO 18 | OUTPUT | Control relé → abrepuertas Fermax |
+### GPIO Pin Assignment
+- GPIO 17 → INPUT, pull-up, doorbell signal from PC817
+- GPIO 18 → OUTPUT, active HIGH, triggers relay → door release
 
 ---
 
@@ -88,7 +60,8 @@ This document contains the Epics (engineering contracts) required to build the C
 > "Read the `CONTEXT.md` file. Your goal is to set up the video stream and physical event detection on the Raspberry Pi Zero. Create the `/edge_node_pizero/` directory and generate two deliverables:
 > 1. An ultra-lightweight `docker-compose.yml` deploying `bluenviron/mediamtx` to expose the physical camera (`/dev/video0`) as a low-latency RTSP stream. Configure it for a moderate resolution (e.g., 800x600) and 15-20 FPS.
 > 2. A Python script (`src/doorbell.py`) using the `gpiozero` and `paho-mqtt` libraries. The script must listen to GPIO pin 17 (connected to a physical button with a pull-up resistor). On button press, it must connect to the local MQTT broker (use Node B's IP defined in the context) and publish the message `{"event": "ring"}` to the `outpost/doorbell` topic.
-> 3. Add a `requirements.txt` file."
+> 3. Add a `requirements.txt` file.
+> 4. Make doorbell.py bidirectional: subscribe to the MQTT topic `outpost/open_door`. When the message `{"event": "open"}` is received, activate GPIO 18 HIGH for 500ms then LOW. Log every door release with timestamp. Use gpiozero's OutputDevice for GPIO 18."
 
 ---
 
@@ -114,4 +87,5 @@ This document contains the Epics (engineering contracts) required to build the C
 >    - `outpost/doorbell` → `🔔 Han llamado al timbre`
 >    - `frigate/events` (person) → `🚨 Persona detectada en la puerta`
 > 4. Optional LLM mode: if the environment variable `USE_LLM=true` is set and a `GEMINI_API_KEY` is provided, replace the fixed caption with a natural language description generated by the Google Gemini API (`gemini-1.5-flash`). The Gemini client must only be initialised when `USE_LLM=true` — the script must not crash at startup if no API key is present.
-> 5. Provide a `requirements.txt` (with `google-genai` commented out as optional), an isolated `docker-compose.yml`, and a `.env.example` with `USE_LLM=false` and `GEMINI_API_KEY` commented out by default."
+> 5. Provide a `requirements.txt` (with `google-genai` commented out as optional), an isolated `docker-compose.yml`, and a `.env.example` with `USE_LLM=false` and `GEMINI_API_KEY` commented out by default.
+> 6. Add Telegram bot command handler `/abrir`: when the authorised user sends /abrir, publish `{"event": "open"}` to the MQTT topic `outpost/open_door`. Security: only process the command if the `chat_id` matches `TELEGRAM_CHAT_ID` from the environment. Add `TELEGRAM_CHAT_ID` to `.env.example`."
