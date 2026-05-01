@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-A distributed AI-powered video intercom system deployed across two physical nodes on a local LAN. When someone approaches the front door (person detection or doorbell press), the system captures a snapshot, sends it to Google Gemini for analysis, and delivers a natural language description to the user via Telegram.
+A distributed AI-powered video intercom system deployed across two physical nodes on a local LAN. When someone approaches the front door (person detection or doorbell press), the system captures a snapshot from Frigate and sends it to the user via Telegram with a fixed caption. Optionally, if `USE_LLM=true`, Google Gemini analyses the snapshot and replaces the caption with a natural language description.
 
 **Always read `CONTEXT.md` before generating any code or configuration.**
 
@@ -46,8 +46,7 @@ A distributed AI-powered video intercom system deployed across two physical node
 2. Frigate on Node B consumes the stream; PCIe Coral TPU detects `person` class → publishes to `frigate/events`
 3. Node A GPIO (pin 17, pull-up) detects doorbell press → publishes `{"event": "ring"}` to `outpost/doorbell`
 4. OpenClaw bridge (Node B) subscribes to both MQTT topics; on event, fetches snapshot from Frigate REST API
-5. Snapshot + prompt sent to `gemini-1.5-flash` via `google-genai` SDK
-6. Gemini response + image forwarded to user via Telegram bot
+5. Snapshot sent to user via Telegram with a fixed caption (`USE_LLM=false`, default). If `USE_LLM=true`, snapshot + prompt are sent to `gemini-1.5-flash` and the Gemini response is used as caption instead.
 
 ---
 
@@ -61,14 +60,14 @@ edge_node_pizero/          # Node A deliverables (Pi Zero W)
 
 core_node_coral/           # Node B AI/NVR services
   docker-compose.yml       # Frigate + Mosquitto
-  config/frigate.yml       # Frigate config (PCIe Coral, person tracking)
+  config/config.yml        # Frigate config (PCIe Coral, person tracking)
   config/mosquitto.conf    # Anonymous LAN MQTT broker
 
 cognitive_agent_openclaw/  # Node B OpenClaw bridge
-  src/openclaw_bridge.py   # MQTT → Gemini → Telegram
+  src/openclaw_bridge.py   # MQTT → Frigate snapshot → Telegram (Gemini optional)
   docker-compose.yml
   requirements.txt
-  .env.example             # GEMINI_API_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+  .env.example             # TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID (GEMINI_API_KEY optional)
 
 smoke_test/                # Inter-node connectivity validation
   node_b_listener.py       # Run on Node B — subscribes to all topics, checks Frigate API
@@ -81,7 +80,7 @@ smoke_test/                # Inter-node connectivity validation
 
 - **Pi Zero W is ARMv6** — Docker images must be `linux/arm/v6` compatible. Prefer native `raspbian`/`alpine` images or pre-built ARM binaries. Do not use images that require ARMv7+.
 - **Coral TPU is PCIe, not USB** — Frigate detector must use device `/dev/apex_0`, not `/dev/bus/usb`. The `edgetpu` type in frigate.yml must point to the PCIe path.
-- **No cloud processing for video** — RTSP stream, Frigate inference, and MQTT all stay on the local LAN. Only the Gemini API call goes out to the internet.
+- **No cloud processing for video** — RTSP stream, Frigate inference, and MQTT all stay on the local LAN. In base mode (`USE_LLM=false`) nothing leaves the LAN. Only the optional Gemini API call goes out to the internet.
 - **Secrets via `.env`** — Never hardcode API keys. All tokens go in `.env` files (excluded from git). Provide `.env.example` templates.
 
 ---
@@ -92,16 +91,18 @@ smoke_test/                # Inter-node connectivity validation
 |------|---------|------------------------------------|----------|-------------------|
 | 1    | Alpha   | Edge Node: RTSP stream + doorbell  | Done     | Done — verified   |
 | 2    | Bravo   | Core Node: Frigate + Mosquitto     | Done     | Done — verified   |
-| 3    | Charlie | OpenClaw: MQTT → Gemini → Telegram | Done     | Pending deploy    |
+| 3    | Charlie | OpenClaw: MQTT → Snapshot → Telegram (Gemini optional) | Done     | Pending deploy    |
 
 ## Epic 3 — Pendiente de deploy
 
-Antes de arrancar `cognitive_agent_openclaw` en Node B se necesitan:
-1. Crear `.env` a partir de `.env.example` con las credenciales reales
-2. `GEMINI_API_KEY` — Google AI Studio
-3. `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` — @BotFather / @userinfobot
-4. `FRIGATE_PASSWORD` — `sudo docker logs frigate 2>&1 | grep -A2 "default user"`
-5. Copiar directorio a Node B y lanzar: `sudo docker compose up -d`
+Mínimo necesario para arrancar (sin LLM):
+1. `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` — @BotFather / @userinfobot
+2. `FRIGATE_PASSWORD` — `sudo docker logs frigate 2>&1 | grep -A2 "default user"` en Node B
+
+Pasos:
+1. Crear `.env` en Node B a partir de `.env.example` con las credenciales reales
+2. (Opcional) Para activar Gemini: `USE_LLM=true` + descomentar `GEMINI_API_KEY` en `.env`
+3. Copiar directorio a Node B y lanzar: `sudo docker compose up -d`
 
 ## Inter-Node Comms — Verified
 
@@ -139,7 +140,7 @@ MQTT communication between Node A and Node B verified via smoke tests (`smoke_te
 | Component     | Language | Key Libraries                          |
 |---------------|----------|----------------------------------------|
 | doorbell.py   | Python   | `gpiozero`, `paho-mqtt`               |
-| openclaw_bridge.py | Python | `paho-mqtt`, `google-genai`, `python-telegram-bot`, `requests` |
+| openclaw_bridge.py | Python | `paho-mqtt`, `requests` (+ `google-genai` opcional si `USE_LLM=true`) |
 | Frigate       | Docker   | `blakeblackshear/frigate`             |
 | RTSP stream   | Docker   | `bluenviron/mediamtx`                 |
 | MQTT broker   | Docker   | `eclipse-mosquitto`                   |

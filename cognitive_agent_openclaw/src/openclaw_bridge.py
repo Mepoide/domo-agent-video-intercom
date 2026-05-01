@@ -5,8 +5,6 @@ import time
 import logging
 import requests
 import paho.mqtt.client as mqtt
-from google import genai
-from google.genai import types
 
 logging.basicConfig(
     level=logging.INFO,
@@ -24,10 +22,22 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 CAMERA_NAME = os.getenv("CAMERA_NAME", "front_door")
 COOLDOWN_SECONDS = int(os.getenv("COOLDOWN_SECONDS", "30"))
+USE_LLM = os.getenv("USE_LLM", "false").lower() == "true"
 
-gemini_client = genai.Client(api_key=GEMINI_API_KEY)
+if USE_LLM:
+    from google import genai
+    from google.genai import types
+    gemini_client = genai.Client(api_key=GEMINI_API_KEY)
+else:
+    gemini_client = None
+
 _last_trigger = 0
 _frigate_token = None
+
+_CAPTIONS = {
+    "doorbell": "🔔 Han llamado al timbre",
+    "frigate": "🚨 Persona detectada en la puerta",
+}
 
 
 def frigate_login():
@@ -117,9 +127,12 @@ def handle_event(trigger, label=None, event_id=None):
     log.info(f"Handling event: trigger={trigger} label={label} event_id={event_id}")
     try:
         image_bytes = fetch_snapshot(event_id)
-        description = analyze_with_gemini(image_bytes, trigger, label)
-        log.info(f"Gemini: {description}")
-        send_telegram(image_bytes, description)
+        if USE_LLM:
+            caption = analyze_with_gemini(image_bytes, trigger, label)
+            log.info(f"Gemini: {caption}")
+        else:
+            caption = _CAPTIONS.get(trigger, "🚪 Evento en la puerta")
+        send_telegram(image_bytes, caption)
     except Exception as e:
         log.error(f"Pipeline error: {e}")
 
@@ -155,7 +168,7 @@ def on_message(client, userdata, msg):
 
 
 if __name__ == "__main__":
-    log.info("OpenClaw bridge starting...")
+    log.info(f"OpenClaw bridge starting... (USE_LLM={USE_LLM})")
     frigate_login()
 
     client = mqtt.Client(client_id="openclaw_bridge")
