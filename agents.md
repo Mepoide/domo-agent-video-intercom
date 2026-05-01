@@ -8,23 +8,53 @@ This document contains the Epics (engineering contracts) required to build the C
 ## EPIC 0: Physical Hardware Integration (Fermax ↔ Pi Zero)
 **Recommended Assignment:** Human Technician + Agent Alpha review
 
-**Objective:** Wire the Raspberry Pi Zero bidirectionally to the existing Fermax CITYMAX 6201 intercom (ref. 8300, 4+N analogue system, 12Vac).
+**Objective:** Wire the Raspberry Pi Zero bidirectionally to the Fermax REF. 9695 electronic amplifier (12Vac green terminal block).
+
+### ⚠️ PHYSICAL PREREQUISITES — BLOCKER
+
+**The Raspberry Pi Zero ships with unpopulated GPIO headers.** The board has bare gold pads — no pin strip soldered. Nothing can be connected until the header is soldered.
+
+**Required before any wiring:**
+1. Solder a 2×20 male pin header onto the Pi Zero GPIO pads.
+2. Verify with a multimeter that the 3.3V and GND pins read ~3.3V before connecting any circuit.
+
+Without the header, this entire Epic is blocked.
 
 ### Bill of Materials
-| Component | Ref | Est. Cost |
-|---|---|---|
-| Optocoupler PC817 | PC817 | ~€0.50 |
-| Resistor 470Ω 1/4W | - | ~€0.10 |
-| 5V 1-channel relay module (optocoupled) | SRD-05VDC-SL-C | ~€2.00 |
-| Dupont jumper cables | - | ~€1.00 |
 
-### Circuit A — INPUT: Doorbell detection
-Detect when someone presses the Fermax street panel button WITHOUT replacing normal intercom operation.
+| Component | Detail | Est. Cost |
+|---|---|---|
+| 2×20 male pin header for Pi Zero | **BLOCKER — solder this first** | ~€1.00 |
+| Soldering iron + solder | Required to solder the header | (if not available) |
+| Optocoupler PC817 | Detect doorbell on terminal J | ~€0.50 |
+| Resistor 470Ω 1/4W | Protect PC817 LED | ~€0.10 |
+| 5V 1-channel relay module (optocoupled) | Actuate terminal Ab (door release) | ~€2.00 |
+| Dupont male-male jumper cables | Pi Zero GPIO → components | ~€1.00 |
+
+**Total: ~€5 in components + header**
+
+### Fermax REF. 9695 — Terminal Block Reference
+
+The green terminal block is labelled left-to-right:
 
 ```
-Fermax call terminal (+) ──┬── [470Ω] ── PC817 pin 1 (Anode)
-                           │
-Fermax call terminal (-) ──┴────────── PC817 pin 2 (Cathode)
+~  ~  |  J  |  Ab  Ab  |  1  2  3  6
+```
+
+| Terminal | Label | Function |
+|----------|-------|----------|
+| `~ ~` | Power input | 12Vac supply — do not touch |
+| `J` | Llamada / Call | Doorbell signal — **connect Circuit A here** |
+| `Ab Ab` | Abrepuertas | Door release — **connect Circuit B here** |
+| `1 2 3 6` | Phone lines | Interior telephone bus — do not touch |
+
+### Circuit A — INPUT: Doorbell detection
+Detect when someone presses the street panel button WITHOUT replacing normal intercom operation.
+
+```
+Terminal J (+) ──┬── [470Ω] ── PC817 pin 1 (Anode)
+                 │
+Terminal J (-) ──┴────────── PC817 pin 2 (Cathode)
 
 PC817 pin 4 (Collector) ── GPIO 17 (Pi Zero) + 10kΩ pull-up to 3.3V
 PC817 pin 3 (Emitter)  ── GND (Pi Zero)
@@ -33,23 +63,23 @@ PC817 pin 3 (Emitter)  ── GND (Pi Zero)
 ⚠️ SAFETY: The PC817 provides galvanic isolation between the 12Vac Fermax system and the 3.3V GPIO. Never connect Fermax terminals directly to GPIO pins.
 
 ### Circuit B — OUTPUT: Door release
-Trigger the existing electric door strike via the Fermax opener terminal.
+Trigger the electric door strike via the Fermax terminal Ab.
 
 ```
 GPIO 18 (Pi Zero) ── Relay module IN
 Pi Zero 5V        ── Relay module VCC
 Pi Zero GND       ── Relay module GND
 
-Relay NO (Normally Open)  ── Fermax opener terminal A
-Relay COM (Common)        ── Fermax opener terminal B
+Relay NO (Normally Open)  ── Terminal Ab (+)
+Relay COM (Common)        ── Terminal Ab (-)
 ```
 
 Pulse duration: 500ms (enough to release the electric strike).
 The relay module must be optocoupled to protect the Pi Zero GPIO.
 
 ### GPIO Pin Assignment
-- GPIO 17 → INPUT, pull-up, doorbell signal from PC817
-- GPIO 18 → OUTPUT, active HIGH, triggers relay → door release
+- GPIO 17 → INPUT, pull-up, doorbell signal from PC817 ← terminal J
+- GPIO 18 → OUTPUT, active HIGH, triggers relay → terminal Ab
 
 ---
 

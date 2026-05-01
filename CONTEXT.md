@@ -12,8 +12,8 @@ This document serves as the ground truth for all engineering agents working on t
 
 | Pin | Direction | Function | Physical interface |
 |-----|-----------|----------|--------------------|
-| GPIO 17 | INPUT (pull-up) | Doorbell detection | PC817 optocoupler ← Fermax call terminal (12Vac) |
-| GPIO 18 | OUTPUT | Door-release relay | 5V relay module → Fermax abrepuertas terminal (12Vac) |
+| GPIO 17 | INPUT (pull-up) | Doorbell detection | PC817 optocoupler ← Fermax REF. 9695 terminal J (12Vac) |
+| GPIO 18 | OUTPUT | Door-release relay | 5V relay module → Fermax REF. 9695 terminal Ab (12Vac) |
 
 * **Node B (Core Processing - Indoor Command):**
     * **Hardware:** Google Coral Dev Board 4GB (Mendel Linux).
