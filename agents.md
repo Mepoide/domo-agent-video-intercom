@@ -5,6 +5,82 @@ This document contains the Epics (engineering contracts) required to build the C
 
 ---
 
+## EPIC 0: Hardware Integration (Physical Layer)
+**Recommended Assignment:** Agent Zero (Hardware Integration Engineer)
+
+**Execution Prompt:**
+> "Read the `CONTEXT.md` file. Your goal is to document and implement the physical integration between the Raspberry Pi Zero W and the Fermax CITYMAX 6201 analog intercom system (ref. 8300, 4+N system, 12Vac, power supply ref. 4802). The system is bidirectional: the Pi Zero must detect doorbell presses without disrupting the existing intercom, and must be able to trigger the electric door strike on command."
+
+---
+
+### Circuit A — Input: Doorbell Detection (Fermax → Pi Zero)
+
+**Principle:** An optocoupler (PC817) is wired in parallel to the Fermax call terminal. When the visitor presses the button, 12Vac flows through the optocoupler LED, activating the phototransistor, which pulls GPIO 17 LOW. The internal pull-up on the Pi Zero keeps it HIGH at rest. The existing intercom telephone continues to ring normally.
+
+**⚠ Safety:** The PC817 provides galvanic isolation between the 12Vac Fermax circuit and the 3.3V GPIO. **Never connect the Fermax ground (N) to the Pi Zero GND.** Never connect any Fermax terminal directly to a GPIO pin.
+
+```
+  FERMAX PLACA                   PC817 OPTOCOUPLER              PI ZERO W
+  ─────────────                  ┌──────────────────┐           ──────────
+                                 │                  │
+  Terminal llamada ──[470Ω]────►│ A (LED+)  C (BJT)│────────── GPIO 17
+  (~ 12Vac cuando               │                  │           (INPUT, pull-up 3V3)
+   se pulsa el botón)           │                  │
+                                 │ K (LED-)  E (BJT)│────────── GND Pi Zero
+  Masa Fermax (N) ─────────────►│                  │
+                                 └──────────────────┘
+  ↑ Esta masa NO se conecta al GND de la Pi Zero.
+    El PC817 aísla galvánicamente ambos circuitos.
+```
+
+**Comportamiento:** botón pulsado → LED conduce → transistor satura → GPIO 17 = LOW → `doorbell.py` detecta evento y publica a MQTT.
+
+---
+
+### Circuit B — Output: Door Release (Pi Zero → Fermax)
+
+**Principle:** A 5V relay module (optocoupled) is driven by GPIO 18. When the relay coil is energised, the Normally-Open (NO) contact closes, shorting the Fermax door-release terminals and triggering the electric strike. The pulse lasts 500 ms — enough to unlatch the door.
+
+**⚠ Safety:** The relay module must be optocoupled (most 1-channel 5V modules from reputable suppliers are). Verify the relay contact is rated for AC loads. Never bridge relay COM and NO before connecting to the Fermax — check with a multimeter first that NO is open at rest.
+
+```
+  PI ZERO W                      MÓDULO RELÉ 5V 1CH             FERMAX PLACA
+  ─────────                      ┌──────────────────┐           ──────────
+                                 │                  │
+  GPIO 18 (OUTPUT) ────────────►│ IN         NO    │────────── Terminal abrepuertas
+                                 │                  │
+  5V Pi Zero ──────────────────►│ VCC        COM   │────────── Masa Fermax (N)
+                                 │                  │
+  GND Pi Zero ─────────────────►│ GND              │
+                                 └──────────────────┘
+  Pulso: GPIO 18 HIGH (500ms) → relé cierra → cerradura abre → GPIO 18 LOW
+```
+
+---
+
+### Component List
+
+| # | Componente | Referencia / Descripción | Precio aprox. |
+|---|-----------|--------------------------|---------------|
+| 1 | Optoacoplador | PC817 (DIP-4) | ~0.10 €/ud |
+| 2 | Resistencia | 470 Ω, 1/4 W | ~0.02 €/ud |
+| 3 | Módulo relé | 5V, 1 canal, optoacoplado | ~2–3 € |
+| 4 | Cable Dupont | Hembra-hembra, 20 cm | ~0.50 € (pack) |
+| 5 | Cable fino | Para empalmar en bornas Fermax | disponible |
+
+**Total estimado: < 5 €** (excluyendo cables de repuesto y Pi Zero W ya instalada)
+
+---
+
+### GPIO Summary — Node A (Pi Zero W)
+
+| Pin | Dirección | Función |
+|-----|-----------|---------|
+| GPIO 17 | INPUT (pull-up) | Detección timbre via PC817 |
+| GPIO 18 | OUTPUT | Control relé → abrepuertas Fermax |
+
+---
+
 ## EPIC 1: Outdoor Telemetry (Edge Node)
 **Recommended Assignment:** Agent Alpha (Edge Systems Engineer)
 
