@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domo Agent · Wiring Diagram</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d1117;
+      color: #c9d1d9;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 20px 16px 40px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #58a6ff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .warning {
+      max-width: 860px;
+      margin: 0 auto 16px;
+      background: #200a00;
+      border: 1px solid #f85149;
+      color: #f85149;
+      text-align: center;
+      padding: 9px 16px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      letter-spacing: 1px;
+    }
+
+    .diagram-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      min-width: 640px;
+      height: auto;
+    }
+
+    .legend {
+      max-width: 860px;
+      margin: 14px auto 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 24px;
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      color: #8b949e;
+    }
+
+    .legend-swatch {
+      width: 28px;
+      height: 3px;
+      border-radius: 2px;
+    }
+
+    .legend-swatch.dashed {
+      background: repeating-linear-gradient(
+        to right, #8b949e 0, #8b949e 5px, transparent 5px, transparent 9px
+      );
+    }
+
+    .flows {
+      max-width: 860px;
+      margin: 16px auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .flow {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-size: 0.71rem;
+      color: #8b949e;
+      line-height: 1.6;
+    }
+
+    .flow b { color: #c9d1d9; }
+  </style>
+</head>
+<body>
+
+  <h1>Domo Agent &mdash; Wiring Diagram &mdash; Fermax REF.9695 &harr; Pi Zero W</h1>
+
+  <div class="warning">&#9888; DESCONECTAR ALIMENTADOR FERMAX ANTES DE REALIZAR CUALQUIER CONEXIÓN</div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 820 510" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Arrow markers -->
+        <marker id="arr-blue"  markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#58a6ff"/></marker>
+        <marker id="arr-green" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#3fb950"/></marker>
+        <marker id="arr-red"   markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#f85149"/></marker>
+        <marker id="arr-gray"  markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#6e7681"/></marker>
+        <!-- Same arrows reversed (for green return) -->
+        <marker id="arr-green-l" markerWidth="7" markerHeight="7" refX="2" refY="3.5" orient="auto"><polygon points="7,0 0,3.5 7,7" fill="#3fb950"/></marker>
+      </defs>
+
+      <!-- ════════════════════════════════════════════
+           FERMAX REF. 9695
+           x=10 y=95 w=145 h=320
+      ════════════════════════════════════════════ -->
+      <rect x="10" y="95" width="145" height="320" rx="6"
+            fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+      <text x="82" y="115" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#c9d1d9">FERMAX</text>
+      <text x="82" y="130" text-anchor="middle" font-size="10" fill="#c9d1d9">REF. 9695</text>
+
+      <!-- 12Vac warning badge -->
+      <rect x="20" y="140" width="125" height="34" rx="3" fill="#200a00" stroke="#f85149" stroke-width="1"/>
+      <text x="82" y="154" text-anchor="middle" font-size="9" fill="#f85149">&#9888; ~ ~ 12Vac</text>
+      <text x="82" y="167" text-anchor="middle" font-size="8.5" fill="#f85149">NO TOCAR</text>
+
+      <!-- Terminal J (llamada / timbre) -->
+      <rect x="20" y="188" width="125" height="52" rx="3" fill="#0d1f3c" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="82" y="206" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#58a6ff">J &mdash; LLAMADA</text>
+      <text x="82" y="220" text-anchor="middle" font-size="8.5" fill="#8b949e">timbre (12Vac)</text>
+      <text x="82" y="232" text-anchor="middle" font-size="8" fill="#6e7681">con portero interior</text>
+      <!-- J connection dots (right edge) -->
+      <circle cx="155" cy="205" r="4.5" fill="#58a6ff"/>
+      <circle cx="155" cy="222" r="4.5" fill="#58a6ff" fill-opacity="0.55"/>
+
+      <!-- Terminal Ab (abrepuertas) -->
+      <rect x="20" y="293" width="125" height="52" rx="3" fill="#0d2818" stroke="#3fb950" stroke-width="1.5"/>
+      <text x="82" y="311" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#3fb950">Ab &mdash; ABRE</text>
+      <text x="82" y="325" text-anchor="middle" font-size="8.5" fill="#8b949e">cerradura (12Vac)</text>
+      <text x="82" y="337" text-anchor="middle" font-size="8" fill="#6e7681">abrepuertas existente</text>
+      <!-- Ab connection dots -->
+      <circle cx="155" cy="310" r="4.5" fill="#3fb950"/>
+      <circle cx="155" cy="327" r="4.5" fill="#3fb950" fill-opacity="0.55"/>
+
+      <!-- Phone bus (no tocar) -->
+      <rect x="20" y="358" width="125" height="42" rx="3" fill="#1a1a1a" stroke="#21262d" stroke-width="1"/>
+      <text x="82" y="373" text-anchor="middle" font-size="8.5" fill="#484f58">1 2 3 6</text>
+      <text x="82" y="386" text-anchor="middle" font-size="8" fill="#484f58">BUS TELÉFONO</text>
+      <text x="82" y="398" text-anchor="middle" font-size="7.5" fill="#484f58">no conectar</text>
+
+
+      <!-- ════════════════════════════════════════════
+           MÓDULO PC817
+           x=235 y=75 w=170 h=165
+      ════════════════════════════════════════════ -->
+      <rect x="235" y="75" width="170" height="168" rx="6"
+            fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+      <text x="320" y="95" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#c9d1d9">MÓDULO PC817</text>
+      <text x="320" y="110" text-anchor="middle" font-size="8.5" fill="#6e7681">optoacoplador</text>
+
+      <!-- Galvanic isolation badge -->
+      <rect x="251" y="118" width="138" height="20" rx="3" fill="#0d1f3c" stroke="#58a6ff" stroke-width="0.5"/>
+      <text x="320" y="131" text-anchor="middle" font-size="8" fill="#58a6ff">aislamiento galvánico</text>
+
+      <!-- Left side (Fermax / screw terminals) -->
+      <text x="247" y="154" font-size="7.5" fill="#6e7681">&#8592; borne tornillo</text>
+      <circle cx="235" cy="163" r="5" fill="#58a6ff"/>
+      <text x="248" y="167" font-size="9.5" fill="#58a6ff">IN+</text>
+      <circle cx="235" cy="187" r="5" fill="#58a6ff" fill-opacity="0.55"/>
+      <text x="248" y="191" font-size="9.5" fill="#8b949e">IN&#8722;</text>
+
+      <!-- Right side (Pi Zero / Dupont) -->
+      <text x="332" y="154" font-size="7.5" fill="#6e7681">Dupont &#8594;</text>
+      <circle cx="405" cy="163" r="5" fill="#58a6ff"/>
+      <text x="368" y="167" font-size="9.5" fill="#58a6ff">OUT</text>
+      <circle cx="405" cy="187" r="5" fill="#6e7681"/>
+      <text x="368" y="191" font-size="9.5" fill="#6e7681">GND</text>
+
+      <!-- Divider -->
+      <line x1="315" y1="145" x2="315" y2="220" stroke="#21262d" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="315" y="222" text-anchor="middle" font-size="7" fill="#484f58">12Vac | 3.3V</text>
+
+
+      <!-- ════════════════════════════════════════════
+           MÓDULO RELÉ 5V
+           x=235 y=295 w=170 h=185
+      ════════════════════════════════════════════ -->
+      <rect x="235" y="295" width="170" height="185" rx="6"
+            fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+      <text x="320" y="315" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#c9d1d9">MÓDULO RELÉ 5V</text>
+      <text x="320" y="330" text-anchor="middle" font-size="8.5" fill="#6e7681">1 canal, optoacoplado</text>
+
+      <!-- Left side (Fermax / screw) -->
+      <text x="247" y="352" font-size="7.5" fill="#6e7681">&#8592; borne tornillo</text>
+      <circle cx="235" cy="363" r="5" fill="#3fb950"/>
+      <text x="248" y="367" font-size="9.5" fill="#3fb950">NO</text>
+      <circle cx="235" cy="388" r="5" fill="#3fb950" fill-opacity="0.55"/>
+      <text x="248" y="392" font-size="9.5" fill="#8b949e">COM</text>
+
+      <!-- Right side (Pi Zero / Dupont) -->
+      <text x="332" y="352" font-size="7.5" fill="#6e7681">Dupont &#8594;</text>
+      <circle cx="405" cy="363" r="5" fill="#3fb950"/>
+      <text x="368" y="367" font-size="9.5" fill="#3fb950">IN</text>
+      <circle cx="405" cy="388" r="5" fill="#f85149"/>
+      <text x="368" y="392" font-size="9.5" fill="#f85149">VCC</text>
+      <circle cx="405" cy="413" r="5" fill="#6e7681"/>
+      <text x="368" y="417" font-size="9.5" fill="#6e7681">GND</text>
+
+      <!-- Pulse info -->
+      <rect x="247" y="428" width="146" height="38" rx="3" fill="#1a1f2a" stroke="#21262d" stroke-width="0.5"/>
+      <text x="320" y="442" text-anchor="middle" font-size="8" fill="#6e7681">pulso GPIO18: 500ms</text>
+      <text x="320" y="455" text-anchor="middle" font-size="8" fill="#6e7681">HIGH &#8594; cerradura &#8594; LOW</text>
+      <text x="320" y="461" text-anchor="middle" font-size="7" fill="#3fb950">&#9679; NO cierra el circuito</text>
+
+
+      <!-- ════════════════════════════════════════════
+           RASPBERRY Pi ZERO W
+           x=580 y=65 w=230 h=420
+      ════════════════════════════════════════════ -->
+      <rect x="580" y="65" width="230" height="420" rx="6"
+            fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+      <text x="695" y="85" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#c9d1d9">RASPBERRY</text>
+      <text x="695" y="100" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#c9d1d9">Pi ZERO W</text>
+      <text x="695" y="115" text-anchor="middle" font-size="8.5" fill="#6e7681">GPIO header 2&#215;20</text>
+      <text x="695" y="128" text-anchor="middle" font-size="7.5" fill="#484f58">Hammer Header pre-instalado</text>
+
+      <!-- Pin 4 — 5V -->
+      <circle cx="580" cy="175" r="6.5" fill="#f85149"/>
+      <text x="595" y="172" font-size="9.5" fill="#f85149">Pin 4 &mdash; 5V</text>
+      <text x="595" y="185" font-size="8" fill="#6e7681">alimentaci&#243;n rel&#233;</text>
+
+      <!-- Pin 6 — GND -->
+      <circle cx="580" cy="225" r="6.5" fill="#6e7681"/>
+      <text x="595" y="222" font-size="9.5" fill="#6e7681">Pin 6 &mdash; GND</text>
+      <text x="595" y="235" font-size="8" fill="#6e7681">masa com&#250;n</text>
+
+      <!-- Pin 11 — GPIO17 INPUT -->
+      <circle cx="580" cy="290" r="6.5" fill="#58a6ff"/>
+      <text x="595" y="285" font-size="9.5" fill="#58a6ff">Pin 11 &mdash; GPIO17</text>
+      <text x="595" y="298" font-size="8" fill="#8b949e">INPUT timbre</text>
+      <text x="595" y="308" font-size="7.5" fill="#484f58">pull-up interno 3.3V</text>
+
+      <!-- Pin 12 — GPIO18 OUTPUT -->
+      <circle cx="580" cy="375" r="6.5" fill="#3fb950"/>
+      <text x="595" y="370" font-size="9.5" fill="#3fb950">Pin 12 &mdash; GPIO18</text>
+      <text x="595" y="383" font-size="8" fill="#8b949e">OUTPUT abrir puerta</text>
+      <text x="595" y="393" font-size="7.5" fill="#484f58">active HIGH 500ms</text>
+
+
+      <!-- ════════════════════════════════════════════
+           WIRES
+      ════════════════════════════════════════════ -->
+
+      <!-- BLUE J(+) → PC817 IN+  (solid) -->
+      <polyline
+        points="155,205 195,205 195,163 235,163"
+        fill="none" stroke="#58a6ff" stroke-width="2"
+        marker-end="url(#arr-blue)"/>
+
+      <!-- BLUE J(-) → PC817 IN-  (dashed, negative rail) -->
+      <polyline
+        points="155,222 203,222 203,187 235,187"
+        fill="none" stroke="#58a6ff" stroke-width="1.5"
+        stroke-dasharray="5,4" stroke-opacity="0.6"/>
+
+      <!-- BLUE PC817 OUT → GPIO17 -->
+      <polyline
+        points="405,163 500,163 500,290 580,290"
+        fill="none" stroke="#58a6ff" stroke-width="2"
+        marker-end="url(#arr-blue)"/>
+
+      <!-- GREEN GPIO18 → Relay IN -->
+      <polyline
+        points="580,375 540,375 540,363 405,363"
+        fill="none" stroke="#3fb950" stroke-width="2"
+        marker-end="url(#arr-green)"/>
+
+      <!-- GREEN Relay NO → Ab(+) (arrow points left) -->
+      <polyline
+        points="235,363 195,363 195,310 155,310"
+        fill="none" stroke="#3fb950" stroke-width="2"
+        marker-end="url(#arr-green-l)"/>
+
+      <!-- GREEN Relay COM → Ab(-) (dashed, negative rail) -->
+      <polyline
+        points="235,388 187,388 187,327 155,327"
+        fill="none" stroke="#3fb950" stroke-width="1.5"
+        stroke-dasharray="5,4" stroke-opacity="0.6"/>
+
+      <!-- RED 5V Pi Zero → Relay VCC -->
+      <polyline
+        points="580,175 513,175 513,388 405,388"
+        fill="none" stroke="#f85149" stroke-width="2"
+        marker-end="url(#arr-red)"/>
+
+      <!-- GRAY GND bus -->
+      <!-- Pi Zero GND → bus junction -->
+      <line x1="580" y1="225" x2="524" y2="225" stroke="#6e7681" stroke-width="1.5"/>
+      <!-- Vertical bus line (covers PC817 GND level to Relay GND level) -->
+      <line x1="524" y1="187" x2="524" y2="413" stroke="#6e7681" stroke-width="1.5"/>
+      <!-- Bus → PC817 GND -->
+      <line x1="524" y1="187" x2="405" y2="187" stroke="#6e7681" stroke-width="1.5"
+            marker-end="url(#arr-gray)"/>
+      <!-- Bus → Relay GND -->
+      <line x1="524" y1="413" x2="405" y2="413" stroke="#6e7681" stroke-width="1.5"
+            marker-end="url(#arr-gray)"/>
+      <!-- Junction dot at Pi Zero GND intersection -->
+      <circle cx="524" cy="225" r="4" fill="#6e7681"/>
+
+    </svg>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:#58a6ff"></div>
+      <span>Se&#241;al timbre &#8212; J &#8594; PC817 &#8594; GPIO17</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:#3fb950"></div>
+      <span>Abrepuertas &#8212; GPIO18 &#8594; Rel&#233; &#8594; Ab</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:#f85149"></div>
+      <span>Alimentaci&#243;n 5V</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:#6e7681"></div>
+      <span>Masa GND (bus com&#250;n)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch dashed"></div>
+      <span>Rail negativo (&#8722;)</span>
+    </div>
+  </div>
+
+  <!-- Data flow boxes -->
+  <div class="flows">
+    <div class="flow">
+      <b>Flujo timbre:</b>
+      J activa &rarr; PC817 (aislamiento galv&#225;nico) &rarr; GPIO17 LOW &rarr; doorbell.py &rarr;
+      MQTT <code>outpost/doorbell</code> &rarr; OpenClaw &rarr; snapshot Frigate &rarr; Telegram &#128276;
+    </div>
+    <div class="flow">
+      <b>Flujo apertura:</b>
+      /abrir Telegram &rarr; OpenClaw &rarr; MQTT <code>outpost/open_door</code> &rarr;
+      doorbell.py &rarr; GPIO18 HIGH 500ms &rarr; Rel&#233; NO cierra &rarr; Ab activa &rarr;
+      cerradura abre &#128682;
+    </div>
+  </div>
+
+</body>
+</html>
