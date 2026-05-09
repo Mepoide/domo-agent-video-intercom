@@ -99,6 +99,61 @@
     }
 
     .flow b { color: #c9d1d9; }
+
+    h2.section-title {
+      max-width: 860px;
+      margin: 36px auto 8px;
+      font-size: 0.82rem;
+      color: #58a6ff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      border-top: 1px solid #21262d;
+      padding-top: 28px;
+    }
+
+    .diagram-label {
+      max-width: 860px;
+      margin: 14px auto 5px;
+      font-size: 0.74rem;
+      color: #8b949e;
+      font-family: 'Courier New', monospace;
+    }
+
+    .bom-wrap {
+      max-width: 860px;
+      margin: 14px auto 0;
+    }
+
+    .bom-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.71rem;
+      font-family: 'Courier New', monospace;
+    }
+
+    .bom-table th {
+      background: #161b22;
+      color: #c9d1d9;
+      padding: 7px 10px;
+      text-align: left;
+      border: 1px solid #21262d;
+    }
+
+    .bom-table td {
+      padding: 6px 10px;
+      border: 1px solid #21262d;
+      color: #8b949e;
+    }
+
+    .bom-table tr:nth-child(odd) td  { background: #161b22; }
+    .bom-table tr:nth-child(even) td { background: #0d1117; }
+
+    .bom-total td {
+      background: #1a1f2a !important;
+      color: #c9d1d9;
+      border-top: 1px solid #58a6ff;
+    }
   </style>
 </head>
 <body>
@@ -249,9 +304,9 @@
       <text x="595" y="298" font-size="8" fill="#8b949e">INPUT timbre</text>
       <text x="595" y="308" font-size="7.5" fill="#484f58">pull-up interno 3.3V</text>
 
-      <!-- Pin 12 — GPIO18 OUTPUT -->
+      <!-- Pin 16 — GPIO18 OUTPUT -->
       <circle cx="580" cy="375" r="6.5" fill="#3fb950"/>
-      <text x="595" y="370" font-size="9.5" fill="#3fb950">Pin 12 &mdash; GPIO18</text>
+      <text x="595" y="370" font-size="9.5" fill="#3fb950">Pin 16 &mdash; GPIO18</text>
       <text x="595" y="383" font-size="8" fill="#8b949e">OUTPUT abrir puerta</text>
       <text x="595" y="393" font-size="7.5" fill="#484f58">active HIGH 500ms</text>
 
@@ -356,6 +411,201 @@
       doorbell.py &rarr; GPIO18 HIGH 500ms &rarr; Rel&#233; NO cierra &rarr; Ab activa &rarr;
       cerradura abre &#128682;
     </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       SECCIÓN 2 — Instalación Física
+  ══════════════════════════════════════════════════════ -->
+  <h2 class="section-title">Instalación Física &mdash; Ubicación de componentes</h2>
+
+  <!-- Diagram A: Wall view -->
+  <p class="diagram-label">A &mdash; Vista frontal de la pared (exterior)</p>
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 500 530" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="granite" width="24" height="24" patternUnits="userSpaceOnUse">
+          <rect width="24" height="24" fill="#252525"/>
+          <rect x="1" y="2" width="10" height="10" fill="#2d2d2d"/>
+          <rect x="13" y="13" width="9" height="9" fill="#222"/>
+          <rect x="2" y="14" width="8" height="6" fill="#2a2a2a"/>
+          <rect x="14" y="2" width="7" height="8" fill="#2c2c2c"/>
+        </pattern>
+        <marker id="arr-up" markerWidth="7" markerHeight="7" refX="3.5" refY="7" orient="auto">
+          <polygon points="0,7 3.5,0 7,7" fill="#f85149"/>
+        </marker>
+      </defs>
+
+      <!-- Stone wall -->
+      <rect x="0" y="0" width="500" height="530" fill="url(#granite)"/>
+      <text x="250" y="22" text-anchor="middle" font-size="9" fill="#484f58" font-family="monospace">PIEDRA GRANITO</text>
+
+      <!-- Visor/awning above Fermax -->
+      <polygon points="118,76 382,76 362,56 138,56" fill="#3a3a3a" stroke="#555" stroke-width="1.2"/>
+      <text x="250" y="50" text-anchor="middle" font-size="8" fill="#777" font-family="monospace">VISERA METÁLICA</text>
+
+      <!-- Fermax box -->
+      <rect x="138" y="76" width="224" height="132" rx="4" fill="#1e1e1e" stroke="#555" stroke-width="2"/>
+      <text x="250" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#c9d1d9" font-family="monospace">FERMAX REF. 9695</text>
+      <text x="250" y="116" text-anchor="middle" font-size="8.5" fill="#8b949e" font-family="monospace">empotrado en granito</text>
+      <rect x="160" y="126" width="180" height="22" rx="3" fill="#200a00" stroke="#f85149" stroke-width="1"/>
+      <text x="250" y="141" text-anchor="middle" font-size="8.5" fill="#f85149" font-family="monospace">&#9888; 12Vac — NO TOCAR</text>
+      <!-- Terminal block -->
+      <rect x="155" y="158" width="190" height="36" rx="2" fill="#0a1a0a" stroke="#2ea043" stroke-width="1"/>
+      <text x="178" y="173" font-size="9" fill="#58a6ff" font-family="monospace">J</text>
+      <text x="215" y="173" font-size="9" fill="#3fb950" font-family="monospace">Ab</text>
+      <text x="263" y="173" font-size="8" fill="#484f58" font-family="monospace">1 2 3 6</text>
+      <text x="250" y="187" text-anchor="middle" font-size="7.5" fill="#3fb950" font-family="monospace">bloque terminales verde</text>
+
+      <!-- 4 cables going down -->
+      <line x1="185" y1="194" x2="185" y2="318" stroke="#58a6ff" stroke-width="1.8"/>
+      <line x1="197" y1="194" x2="197" y2="318" stroke="#58a6ff" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.6"/>
+      <line x1="209" y1="194" x2="209" y2="318" stroke="#3fb950" stroke-width="1.8"/>
+      <line x1="221" y1="194" x2="221" y2="318" stroke="#3fb950" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.6"/>
+
+      <!-- Distance dimension -->
+      <line x1="130" y1="194" x2="130" y2="318" stroke="#6e7681" stroke-width="0.8"/>
+      <line x1="123" y1="194" x2="137" y2="194" stroke="#6e7681" stroke-width="0.8"/>
+      <line x1="123" y1="318" x2="137" y2="318" stroke="#6e7681" stroke-width="0.8"/>
+      <text x="117" y="260" text-anchor="middle" font-size="8" fill="#6e7681" font-family="monospace"
+            transform="rotate(-90,117,260)">~15 cm</text>
+
+      <!-- Cable labels -->
+      <text x="295" y="248" font-size="8" fill="#6e7681" font-family="monospace">&#8592; 4 cables</text>
+      <text x="295" y="261" font-size="7.5" fill="#484f58" font-family="monospace">J(+) J(&#8722;) Ab(+) Ab(&#8722;)</text>
+
+      <!-- IP65 box -->
+      <rect x="118" y="318" width="264" height="158" rx="5" fill="#0d1f0d" stroke="#3fb950" stroke-width="2.2"/>
+      <text x="250" y="342" text-anchor="middle" font-size="11" font-weight="bold" fill="#3fb950" font-family="monospace">CAJA IP65</text>
+      <text x="250" y="358" text-anchor="middle" font-size="8.5" fill="#8b949e" font-family="monospace">120&#215;80&#215;55mm</text>
+      <text x="250" y="373" text-anchor="middle" font-size="8" fill="#6e7681" font-family="monospace">atornillada en granito (tacos M6)</text>
+      <text x="250" y="393" text-anchor="middle" font-size="9" fill="#c9d1d9" font-family="monospace">Pi Zero W + Rel&#233; + PC817</text>
+
+      <!-- Corner screws -->
+      <circle cx="128" cy="328" r="4.5" fill="none" stroke="#555" stroke-width="1.5"/>
+      <circle cx="372" cy="328" r="4.5" fill="none" stroke="#555" stroke-width="1.5"/>
+      <circle cx="128" cy="466" r="4.5" fill="none" stroke="#555" stroke-width="1.5"/>
+      <circle cx="372" cy="466" r="4.5" fill="none" stroke="#555" stroke-width="1.5"/>
+
+      <!-- Camera hole on left face -->
+      <circle cx="118" cy="385" r="16" fill="#0d1117" stroke="#58a6ff" stroke-width="2"/>
+      <text x="118" y="390" text-anchor="middle" font-size="11" fill="#58a6ff">&#128247;</text>
+      <!-- FOV cone -->
+      <polygon points="103,385 52,340 52,430" fill="#58a6ff" fill-opacity="0.07" stroke="#58a6ff" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="42" y="336" font-size="7.5" fill="#58a6ff" font-family="monospace" text-anchor="middle">campo</text>
+      <text x="42" y="347" font-size="7.5" fill="#58a6ff" font-family="monospace" text-anchor="middle">visual</text>
+
+      <!-- Cable glands at bottom -->
+      <rect x="178" y="472" width="36" height="13" rx="4" fill="#0a1a0a" stroke="#3fb950" stroke-width="1.2"/>
+      <text x="196" y="482" text-anchor="middle" font-size="7.5" fill="#3fb950" font-family="monospace">J/Ab</text>
+      <rect x="272" y="472" width="36" height="13" rx="4" fill="#1a0a0a" stroke="#f85149" stroke-width="1.2"/>
+      <text x="290" y="482" text-anchor="middle" font-size="7.5" fill="#f85149" font-family="monospace">USB</text>
+
+      <!-- USB power arrow from below -->
+      <line x1="290" y1="530" x2="290" y2="488" stroke="#f85149" stroke-width="1.5" marker-end="url(#arr-up)"/>
+      <text x="335" y="515" font-size="8" fill="#f85149" font-family="monospace">USB power</text>
+      <text x="335" y="527" font-size="7.5" fill="#484f58" font-family="monospace">desde interior</text>
+    </svg>
+  </div>
+
+  <!-- Diagram B: IP65 box interior -->
+  <p class="diagram-label">B &mdash; Vista interior de la caja IP65 &mdash; 120&#215;80mm (escala 3px/mm)</p>
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 560 370" xmlns="http://www.w3.org/2000/svg">
+
+      <rect x="0" y="0" width="560" height="370" fill="#0d1117"/>
+
+      <!-- Box outer wall: 120mm×80mm → 360×240px, offset x=100 y=40 -->
+      <rect x="100" y="40" width="360" height="240" rx="6"
+            fill="#111" stroke="#3fb950" stroke-width="2.5"/>
+      <rect x="108" y="48" width="344" height="224" rx="3"
+            fill="#0d1117" stroke="#21262d" stroke-width="1"/>
+
+      <!-- Camera hole on left face (⌀25mm → r=37px) -->
+      <circle cx="100" cy="160" r="37" fill="#0d1117" stroke="#58a6ff" stroke-width="2.2"/>
+      <circle cx="100" cy="160" r="13" fill="#0a1520" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="100" y="165" text-anchor="middle" font-size="12" fill="#58a6ff">&#128247;</text>
+      <text x="55" y="138" text-anchor="middle" font-size="7.5" fill="#58a6ff" font-family="monospace">&#8960; 25mm</text>
+      <text x="55" y="150" text-anchor="middle" font-size="7.5" fill="#58a6ff" font-family="monospace">c&#225;mara</text>
+
+      <!-- Pi Zero: 65×30mm → 195×90px — top-left area -->
+      <rect x="118" y="55" width="195" height="90" rx="3"
+            fill="#0d1f3c" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="215" y="93" text-anchor="middle" font-size="10" font-weight="bold" fill="#58a6ff" font-family="monospace">Pi Zero W</text>
+      <text x="215" y="108" text-anchor="middle" font-size="8" fill="#6e7681" font-family="monospace">65&#215;30mm</text>
+      <!-- GPIO header strip -->
+      <rect x="312" y="63" width="6" height="74" rx="1" fill="#484f58"/>
+      <text x="323" y="103" font-size="7" fill="#484f58" font-family="monospace">GPIO</text>
+
+      <!-- Relay: 50×26mm → 150×78px — top-right -->
+      <rect x="328" y="55" width="114" height="78" rx="3"
+            fill="#0d2818" stroke="#3fb950" stroke-width="1.5"/>
+      <text x="385" y="88" text-anchor="middle" font-size="10" font-weight="bold" fill="#3fb950" font-family="monospace">REL&#201;</text>
+      <text x="385" y="103" text-anchor="middle" font-size="7.5" fill="#6e7681" font-family="monospace">50&#215;26mm</text>
+      <!-- Screw terminals on left side of relay -->
+      <rect x="328" y="64" width="9" height="10" rx="1" fill="#3fb950" fill-opacity="0.45"/>
+      <rect x="328" y="78" width="9" height="10" rx="1" fill="#3fb950" fill-opacity="0.45"/>
+
+      <!-- PC817: 35×22mm → 105×66px — bottom-left -->
+      <rect x="158" y="168" width="105" height="66" rx="3"
+            fill="#0d1f3c" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="210" y="198" text-anchor="middle" font-size="10" font-weight="bold" fill="#58a6ff" font-family="monospace">PC817</text>
+      <text x="210" y="213" text-anchor="middle" font-size="7.5" fill="#6e7681" font-family="monospace">35&#215;22mm</text>
+      <!-- Screw terminals left side -->
+      <rect x="158" y="177" width="8" height="8" rx="1" fill="#58a6ff" fill-opacity="0.5"/>
+      <rect x="158" y="190" width="8" height="8" rx="1" fill="#58a6ff" fill-opacity="0.5"/>
+
+      <!-- Cable glands at bottom wall -->
+      <ellipse cx="200" cy="280" rx="20" ry="11" fill="#0a1a0a" stroke="#3fb950" stroke-width="1.5"/>
+      <text x="200" y="284" text-anchor="middle" font-size="7.5" fill="#3fb950" font-family="monospace">J/Ab</text>
+      <text x="200" y="300" text-anchor="middle" font-size="7" fill="#6e7681" font-family="monospace">cables Fermax</text>
+
+      <ellipse cx="370" cy="280" rx="20" ry="11" fill="#1a0a0a" stroke="#f85149" stroke-width="1.5"/>
+      <text x="370" y="284" text-anchor="middle" font-size="7.5" fill="#f85149" font-family="monospace">USB</text>
+      <text x="370" y="300" text-anchor="middle" font-size="7" fill="#6e7681" font-family="monospace">power 5V</text>
+
+      <!-- Dimension: width 120mm -->
+      <line x1="100" y1="300" x2="460" y2="300" stroke="#6e7681" stroke-width="0.8"/>
+      <line x1="100" y1="294" x2="100" y2="306" stroke="#6e7681" stroke-width="0.8"/>
+      <line x1="460" y1="294" x2="460" y2="306" stroke="#6e7681" stroke-width="0.8"/>
+      <text x="280" y="316" text-anchor="middle" font-size="8.5" fill="#6e7681" font-family="monospace">120 mm</text>
+
+      <!-- Dimension: height 80mm -->
+      <line x1="475" y1="40" x2="475" y2="280" stroke="#6e7681" stroke-width="0.8"/>
+      <line x1="469" y1="40" x2="481" y2="40" stroke="#6e7681" stroke-width="0.8"/>
+      <line x1="469" y1="280" x2="481" y2="280" stroke="#6e7681" stroke-width="0.8"/>
+      <text x="497" y="165" text-anchor="middle" font-size="8.5" fill="#6e7681" font-family="monospace"
+            transform="rotate(90,497,165)">80 mm</text>
+
+      <!-- Depth note -->
+      <text x="280" y="338" text-anchor="middle" font-size="8" fill="#484f58" font-family="monospace">
+        profundidad 55mm &#8212; suficiente para Pi Zero (5mm) + cableado
+      </text>
+    </svg>
+  </div>
+
+  <!-- Materials table -->
+  <div class="bom-wrap">
+    <p class="diagram-label">Lista de materiales de instalaci&#243;n f&#237;sica</p>
+    <table class="bom-table">
+      <thead>
+        <tr>
+          <th>Componente</th>
+          <th>Medida / Referencia</th>
+          <th>D&#243;nde</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Caja estanca IP65</td><td>120&#215;80&#215;55mm</td><td>Amazon.es ~7&#8364;</td></tr>
+        <tr><td>Hammer Header macho 2&#215;20 + jig</td><td>Pimoroni PIM296</td><td>~8&#8364;</td></tr>
+        <tr><td>M&#243;dulo PC817 optoacoplador</td><td>bornes tornillo + Dupont</td><td>Amazon.es ~7&#8364; (&#215;2)</td></tr>
+        <tr><td>M&#243;dulo rel&#233; 5V 1 canal</td><td>optoacoplado SRD-05VDC</td><td>Amazon.es ~5&#8364;</td></tr>
+        <tr><td>Cables Dupont hembra-hembra</td><td>40 pines 20cm</td><td>Amazon.es ~6.50&#8364;</td></tr>
+        <tr><td>Silicona neutra transparente</td><td>para sellar c&#225;mara y cables</td><td>ferreter&#237;a ~3&#8364;</td></tr>
+        <tr><td>Taco + tornillo inox M6 &#215;4</td><td>para taladrar granito</td><td>ferreter&#237;a ~2&#8364;</td></tr>
+        <tr class="bom-total"><td colspan="2"><strong>Total</strong></td><td><strong>~39&#8364;</strong></td></tr>
+      </tbody>
+    </table>
   </div>
 
 </body>
