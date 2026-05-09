@@ -12,8 +12,10 @@ This document serves as the ground truth for all engineering agents working on t
 
 | Pin | Direction | Function | Physical interface |
 |-----|-----------|----------|--------------------|
-| GPIO 17 | INPUT (pull-up) | Doorbell detection | PC817 optocoupler ← Fermax REF. 9695 terminal J (12Vac) |
-| GPIO 18 | OUTPUT | Door-release relay | 5V relay module → Fermax REF. 9695 terminal Ab (12Vac) |
+| GPIO 17 | INPUT (pull-up) | Doorbell detection | PC817 module OUT pin ← module IN+/IN- ← Fermax REF. 9695 terminal J (12Vac) |
+| GPIO 18 | OUTPUT | Door-release relay | 5V relay module NO/COM → Fermax REF. 9695 terminal Ab (12Vac) |
+
+**Definitive physical components (Epic 0):** Hammer Header 2×20 (no-solder, hammer fit) · PC817 optocoupler module with integrated resistors and screw terminals · 5V 1-channel relay module (optocoupled) · Dupont female-female cables.
 
 * **Node B (Core Processing - Indoor Command):**
     * **Hardware:** Google Coral Dev Board 4GB (Mendel Linux).

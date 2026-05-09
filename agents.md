@@ -12,10 +12,10 @@ This document contains the Epics (engineering contracts) required to build the C
 
 ### ⚠️ PHYSICAL PREREQUISITES — BLOCKER
 
-**The Raspberry Pi Zero ships with unpopulated GPIO headers.** The board has bare gold pads — no pin strip soldered. Nothing can be connected until the header is soldered.
+**The Raspberry Pi Zero ships with unpopulated GPIO headers.** The board has bare gold pads — no pin strip installed. Nothing can be connected until the header is fitted.
 
 **Required before any wiring:**
-1. Solder a 2×20 male pin header onto the Pi Zero GPIO pads.
+1. Install a Hammer Header Macho 2×20 with the included alignment jig — no soldering required, press in with a hammer.
 2. Verify with a multimeter that the 3.3V and GND pins read ~3.3V before connecting any circuit.
 
 Without the header, this entire Epic is blocked.
@@ -24,14 +24,12 @@ Without the header, this entire Epic is blocked.
 
 | Component | Detail | Est. Cost |
 |---|---|---|
-| 2×20 male pin header for Pi Zero | **BLOCKER — solder this first** | ~€1.00 |
-| Soldering iron + solder | Required to solder the header | (if not available) |
-| Optocoupler PC817 | Detect doorbell on terminal J | ~€0.50 |
-| Resistor 470Ω 1/4W | Protect PC817 LED | ~€0.10 |
+| Hammer Header Macho 2×20 + alignment jig | **BLOCKER — fit before any wiring, no soldering required** | ~€5.00 |
+| PC817 optocoupler module (1 or 2 channel) | Integrated resistors; screw terminal on Fermax side, Dupont pins on Pi Zero side | ~€2.00 |
 | 5V 1-channel relay module (optocoupled) | Actuate terminal Ab (door release) | ~€2.00 |
-| Dupont male-male jumper cables | Pi Zero GPIO → components | ~€1.00 |
+| Dupont female-female jumper cables (pack 20–40) | Pi Zero GPIO → components | ~€1.00 |
 
-**Total: ~€5 in components + header**
+**Total: ~€10**
 
 ### Fermax REF. 9695 — Terminal Block Reference
 
@@ -49,18 +47,16 @@ The green terminal block is labelled left-to-right:
 | `1 2 3 6` | Phone lines | Interior telephone bus — do not touch |
 
 ### Circuit A — INPUT: Doorbell detection
-Detect when someone presses the street panel button WITHOUT replacing normal intercom operation.
+Detect when someone presses the street panel button WITHOUT replacing normal intercom operation. The PC817 module has resistors already integrated — no discrete components needed.
 
 ```
-Terminal J (+) ──┬── [470Ω] ── PC817 pin 1 (Anode)
-                 │
-Terminal J (-) ──┴────────── PC817 pin 2 (Cathode)
-
-PC817 pin 4 (Collector) ── GPIO 17 (Pi Zero) + 10kΩ pull-up to 3.3V
-PC817 pin 3 (Emitter)  ── GND (Pi Zero)
+FERMAX REF. 9695           PC817 MODULE                  PI ZERO W
+─────────────────          ────────────                  ─────────
+Terminal J (+) ── screw ── IN+                OUT ── GPIO 17  (Pin 11)
+Terminal J (-) ── screw ── IN-                GND ── GND      (Pin 6)
 ```
 
-⚠️ SAFETY: The PC817 provides galvanic isolation between the 12Vac Fermax system and the 3.3V GPIO. Never connect Fermax terminals directly to GPIO pins.
+⚠️ SAFETY: The PC817 module provides galvanic isolation between the 12Vac Fermax system and the 3.3V GPIO. Never connect Fermax terminals directly to GPIO pins.
 
 ### Circuit B — OUTPUT: Door release
 Trigger the electric door strike via the Fermax terminal Ab.
