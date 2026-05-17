@@ -8,15 +8,16 @@ This document contains the Epics (engineering contracts) required to build the C
 ## EPIC 0: Physical Hardware Integration (Fermax ↔ Pi Zero)
 **Recommended Assignment:** Human Technician + Agent Alpha review
 
-**Objective:** Wire the Raspberry Pi Zero bidirectionally to the Fermax REF. 9695 electronic amplifier (12Vac green terminal block).
+**Objective:** Wire the Raspberry Pi Zero bidirectionally to the Fermax REF. 9695 electronic amplifier (12Vac green terminal block) and house all electronics inside the Fermax metal enclosure on a perfboard powered directly from the 12Vac line via a buck converter.
 
 ### ⚠️ PHYSICAL PREREQUISITES — BLOCKER
 
 **The Raspberry Pi Zero ships with unpopulated GPIO headers.** The board has bare gold pads — no pin strip installed. Nothing can be connected until the header is fitted.
 
 **Required before any wiring:**
-1. Install a Hammer Header Macho 2×20 with the included alignment jig — no soldering required, press in with a hammer.
+1. Install a Hammer Header Macho 2×20 (Pimoroni PIM296) with the included alignment jig — no soldering required, press in with a hammer.
 2. Verify with a multimeter that the 3.3V and GND pins read ~3.3V before connecting any circuit.
+3. Measure the free space inside the Fermax metal box (ZONA A lateral and ZONA B rear) before buying the perfboard — dimensions in the wiring diagram are estimates.
 
 Without the header, this entire Epic is blocked.
 
@@ -24,12 +25,17 @@ Without the header, this entire Epic is blocked.
 
 | Component | Detail | Est. Cost |
 |---|---|---|
-| Hammer Header Macho 2×20 + alignment jig | **BLOCKER — fit before any wiring, no soldering required** | ~€5.00 |
-| PC817 optocoupler module (1 or 2 channel) | Integrated resistors; screw terminal on Fermax side, Dupont pins on Pi Zero side | ~€2.00 |
-| 5V 1-channel relay module (optocoupled) | Actuate terminal Ab (door release) | ~€2.00 |
-| Dupont female-female jumper cables (pack 20–40) | Pi Zero GPIO → components | ~€1.00 |
+| Hammer Header Macho 2×20 + alignment jig | **BLOCKER — Pimoroni PIM296, no soldering required** | ~€8.00 |
+| PC817 optocoupler module (1 or 2 channel) | Integrated resistors; screw terminal on Fermax side, Dupont pins on Pi Zero side | ~€7.00 |
+| 5V 1-channel relay module (optocoupled) | SRD-05VDC-SL-C, actuate terminal Ab | ~€5.00 |
+| Buck converter 12Vac→5V 3A | MP1584 or similar — **must accept AC input, not DC only** | ~€4.00 |
+| Perfboard 10×8cm | Double-sided preferred; measure ZONA B before buying | ~€2.00 |
+| Nylon M3 standoffs ×8 + screws | 10mm height, to isolate perfboard from metal box | ~€2.00 |
+| Kapton tape 25mm | 2 layers on all interior metal surfaces before mounting | ~€3.00 |
+| Dupont female-female cables 40p | 20cm, Pi Zero GPIO → modules | ~€6.50 |
+| Transparent neutral silicone | For sealing camera hole in Fermax frontal | ~€3.00 |
 
-**Total: ~€10**
+**Total: ~€40.50**
 
 ### Fermax REF. 9695 — Terminal Block Reference
 

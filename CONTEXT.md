@@ -15,7 +15,7 @@ This document serves as the ground truth for all engineering agents working on t
 | GPIO 17 | INPUT (pull-up) | Doorbell detection | PC817 module OUT pin ← module IN+/IN- ← Fermax REF. 9695 terminal J (12Vac) |
 | GPIO 18 | OUTPUT | Door-release relay | 5V relay module NO/COM → Fermax REF. 9695 terminal Ab (12Vac) |
 
-**Definitive physical components (Epic 0):** Hammer Header 2×20 (no-solder, hammer fit) · PC817 optocoupler module with integrated resistors and screw terminals · 5V 1-channel relay module (optocoupled) · Dupont female-female cables.
+**Physical housing (Epic 0 — Escenario A):** All electronics mounted on a perfboard inside the Fermax metal enclosure. Power from Fermax 12Vac terminals (~~) → buck converter 12Vac→5Vdc 3A → Pi Zero + modules. Kapton tape on all interior metal surfaces + nylon M3 standoffs for isolation. Hammer Header 2×20 (no-solder) · PC817 module (screw terminals + Dupont) · relay module (optocoupled) · perfboard 10×8cm · buck converter (AC input). See `edge_node_pizero/wiring-diagram.html` for full diagrams.
 
 * **Node B (Core Processing - Indoor Command):**
     * **Hardware:** Google Coral Dev Board 4GB (Mendel Linux).

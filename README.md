@@ -23,9 +23,22 @@ A smart, autonomous video intercom system designed for single-family homes. Comb
 
 ### Node A — Raspberry Pi Zero W
 
-#### Physical wiring
-- **Camera:** OV5647 module connected via CSI ribbon cable.
-- **Doorbell button:** Connected between **GPIO 17** and **GND**. The script uses an internal pull-up resistor — no external resistor needed.
+#### Physical wiring — Fermax REF. 9695 integration (Epic 0)
+
+The Pi Zero and all associated modules (relay, PC817 optocoupler, buck converter) are housed **inside the Fermax metal enclosure** on a perfboard powered directly from the 12Vac line.
+
+See [`edge_node_pizero/wiring-diagram.html`](edge_node_pizero/wiring-diagram.html) for the full interactive wiring diagram, cross-section diagrams, and BOM (~€40.50).
+
+**GPIO assignments:**
+- **GPIO 17** (Pin 11, INPUT pull-up) — doorbell detection via PC817 module ← Fermax terminal J
+- **GPIO 18** (Pin 16, OUTPUT) — door release via relay module → Fermax terminal Ab
+
+**Power:** Fermax terminals `~~ 12Vac` → buck converter 12Vac→5Vdc 3A → Pi Zero Pin 4 (5V). Never connect USB power simultaneously.
+
+**Key safety:** 2 layers of Kapton tape on all interior metal surfaces + nylon M3 standoffs (10mm) before mounting the perfboard. The Fermax metal box is at Fermax ground potential.
+
+- **Camera:** OV5647 module connected via CSI ribbon cable. ⌀25mm hole drilled in Fermax frontal panel, sealed with transparent silicone.
+- **Doorbell button:** Detected via PC817 optocoupler module (galvanic isolation between 12Vac Fermax and 3.3V GPIO). Internal pull-up on GPIO 17 — no external resistor needed.
 
 #### OS & dependencies
 ```bash
