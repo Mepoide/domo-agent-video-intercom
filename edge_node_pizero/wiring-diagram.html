@@ -608,5 +608,260 @@
     </table>
   </div>
 
+  <!-- ══════════════════════════════════════════════════════
+       SECCIÓN 3 — Montaje Físico Escenario A
+  ══════════════════════════════════════════════════════ -->
+  <h2 class="section-title">Montaje Físico &mdash; Escenario A (dentro de la caja Fermax)</h2>
+
+  <style>
+    .safety-box {
+      max-width: 860px; margin: 14px auto;
+      background: #200a00; border: 1px solid #f85149; border-radius: 4px;
+      padding: 12px 16px; font-size: 0.72rem;
+      font-family: 'Courier New', monospace; color: #f85149; line-height: 1.9;
+    }
+    .safety-box b { color: #ff7b72; }
+  </style>
+
+  <!-- ── Diagrama 1: Perfil / sección transversal ── -->
+  <p class="diagram-label">1 &mdash; Vista de perfil (secci&#243;n transversal) &mdash; calle &#8594; granito</p>
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 720 385" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="grt" width="22" height="22" patternUnits="userSpaceOnUse">
+          <rect width="22" height="22" fill="#252525"/>
+          <rect x="1" y="2" width="9" height="9" fill="#2d2d2d"/>
+          <rect x="12" y="12" width="8" height="7" fill="#222"/>
+          <rect x="2" y="14" width="7" height="5" fill="#2a2a2a"/>
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width="720" height="385" fill="#0d1117"/>
+
+      <!-- CALLE label -->
+      <text x="22" y="185" text-anchor="middle" font-size="9" fill="#484f58" font-family="monospace"
+            transform="rotate(-90,22,185)">CALLE</text>
+
+      <!-- Frontal Fermax (~1.5cm) -->
+      <rect x="35" y="75" width="28" height="210" rx="2" fill="#282828" stroke="#484f58" stroke-width="1.5"/>
+      <text x="49" y="68" text-anchor="middle" font-size="8" fill="#8b949e" font-family="monospace">FRONTAL</text>
+      <circle cx="49" cy="205" r="13" fill="#0d1117" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="49" y="209" text-anchor="middle" font-size="10">&#128247;</text>
+      <line x1="63" y1="205" x2="82" y2="185" stroke="#58a6ff" stroke-width="0.8" stroke-dasharray="3,2"/>
+      <text x="84" y="183" font-size="7" fill="#58a6ff" font-family="monospace">&#8960;25mm</text>
+
+      <!-- Metal box -->
+      <rect x="63" y="55" width="420" height="250" rx="4" fill="#111" stroke="#555" stroke-width="2"/>
+      <!-- Cables entering from top -->
+      <line x1="200" y1="55" x2="200" y2="83" stroke="#8b949e" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="213" y1="55" x2="213" y2="83" stroke="#8b949e" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="226" y1="55" x2="226" y2="83" stroke="#f85149" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7"/>
+      <text x="330" y="51" font-size="8" fill="#555" font-family="monospace">CAJA MET&#193;LICA &#8593; cables a vivienda</text>
+
+      <!-- REF.9695 block (~3cm = 70px) -->
+      <rect x="73" y="75" width="70" height="210" rx="3" fill="#0d1f3c" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="108" y="178" text-anchor="middle" font-size="9" font-weight="bold" fill="#58a6ff" font-family="monospace"
+            transform="rotate(-90,108,178)">REF.9695</text>
+      <circle cx="143" cy="138" r="4" fill="#58a6ff"/>
+      <text x="149" y="142" font-size="8" fill="#58a6ff" font-family="monospace">J</text>
+      <circle cx="143" cy="158" r="4" fill="#3fb950"/>
+      <text x="149" y="162" font-size="8" fill="#3fb950" font-family="monospace">Ab</text>
+      <circle cx="143" cy="178" r="4" fill="#f85149" fill-opacity="0.7"/>
+      <text x="149" y="182" font-size="8" fill="#f85149" fill-opacity="0.8" font-family="monospace">~~</text>
+
+      <!-- Kapton separator -->
+      <rect x="148" y="75" width="6" height="210" fill="#e3b341" opacity="0.85"/>
+      <text x="151" y="70" text-anchor="middle" font-size="8" fill="#e3b341" font-family="monospace">K</text>
+
+      <!-- ZONA B — perfboard -->
+      <rect x="162" y="113" width="198" height="155" rx="3" fill="#0a1f0a" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="7,4"/>
+      <text x="261" y="106" text-anchor="middle" font-size="8" fill="#3fb950" font-family="monospace">ZONA B — perfboard 10&#215;8cm</text>
+      <rect x="170" y="122" width="120" height="55" rx="2" fill="#0d1f3c" stroke="#58a6ff" stroke-width="1.2"/>
+      <text x="230" y="148" text-anchor="middle" font-size="9" fill="#58a6ff" font-family="monospace">Pi Zero W</text>
+      <text x="230" y="161" text-anchor="middle" font-size="7" fill="#6e7681" font-family="monospace">65&#215;30mm</text>
+      <rect x="298" y="125" width="55" height="48" rx="2" fill="#2a1a08" stroke="#ffa657" stroke-width="1.2"/>
+      <text x="325" y="147" text-anchor="middle" font-size="8.5" fill="#ffa657" font-family="monospace">Buck</text>
+      <text x="325" y="160" text-anchor="middle" font-size="7" fill="#ffa657" font-family="monospace">12V&#8594;5V</text>
+      <!-- Standoff circles at perfboard corners -->
+      <circle cx="170" cy="122" r="4.5" fill="none" stroke="#8b949e" stroke-width="1.2"/>
+      <circle cx="358" cy="122" r="4.5" fill="none" stroke="#8b949e" stroke-width="1.2"/>
+      <circle cx="170" cy="268" r="4.5" fill="none" stroke="#8b949e" stroke-width="1.2"/>
+      <circle cx="358" cy="268" r="4.5" fill="none" stroke="#8b949e" stroke-width="1.2"/>
+
+      <!-- ZONA A callout (not visible in this cross-section) -->
+      <rect x="372" y="82" width="97" height="210" rx="3" fill="none" stroke="#21262d" stroke-width="1" stroke-dasharray="5,5"/>
+      <text x="420" y="158" text-anchor="middle" font-size="8" fill="#484f58" font-family="monospace"
+            transform="rotate(-90,420,158)">ZONA A (lateral) + libre</text>
+
+      <!-- Granite -->
+      <rect x="488" y="55" width="155" height="250" fill="url(#grt)"/>
+      <text x="565" y="183" text-anchor="middle" font-size="9" fill="#484f58" font-family="monospace"
+            transform="rotate(-90,565,183)">GRANITO</text>
+
+      <!-- Dimension line -->
+      <line x1="35" y1="334" x2="645" y2="334" stroke="#21262d" stroke-width="0.6"/>
+      <line x1="35"  y1="327" x2="35"  y2="341" stroke="#6e7681" stroke-width="0.8"/>
+      <line x1="63"  y1="327" x2="63"  y2="341" stroke="#6e7681" stroke-width="0.8"/>
+      <line x1="73"  y1="327" x2="73"  y2="341" stroke="#58a6ff" stroke-width="0.8"/>
+      <line x1="148" y1="327" x2="148" y2="341" stroke="#58a6ff" stroke-width="0.8"/>
+      <line x1="162" y1="327" x2="162" y2="341" stroke="#3fb950" stroke-width="0.8"/>
+      <line x1="360" y1="327" x2="360" y2="341" stroke="#3fb950" stroke-width="0.8"/>
+      <line x1="483" y1="327" x2="483" y2="341" stroke="#484f58" stroke-width="0.8"/>
+      <text x="49"  y="356" text-anchor="middle" font-size="7.5" fill="#8b949e" font-family="monospace">1.5cm</text>
+      <text x="110" y="356" text-anchor="middle" font-size="7.5" fill="#58a6ff" font-family="monospace">~3cm REF</text>
+      <text x="261" y="356" text-anchor="middle" font-size="7.5" fill="#3fb950" font-family="monospace">~6-7cm ZONA B</text>
+      <text x="422" y="356" text-anchor="middle" font-size="7.5" fill="#484f58" font-family="monospace">A + libre</text>
+      <text x="300" y="376" text-anchor="middle" font-size="8" fill="#6e7681" font-family="monospace">
+        profundidad total caja ~12cm &#8212; medir antes de comprar la perfboard
+      </text>
+    </svg>
+  </div>
+
+  <!-- ── Diagrama 2: Vista frontal interior ── -->
+  <p class="diagram-label">2 &mdash; Vista frontal interior de la caja met&#225;lica (REF.9695 retirado)</p>
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 640 490" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="0" width="640" height="490" fill="#0d1117"/>
+
+      <!-- Box outline -->
+      <rect x="25" y="40" width="590" height="420" rx="5" fill="#111" stroke="#555" stroke-width="2.5"/>
+      <!-- Corner mounting holes -->
+      <circle cx="40"  cy="55"  r="5.5" fill="none" stroke="#484f58" stroke-width="1.5"/>
+      <circle cx="600" cy="55"  r="5.5" fill="none" stroke="#484f58" stroke-width="1.5"/>
+      <circle cx="40"  cy="445" r="5.5" fill="none" stroke="#484f58" stroke-width="1.5"/>
+      <circle cx="600" cy="445" r="5.5" fill="none" stroke="#484f58" stroke-width="1.5"/>
+      <!-- Cables from top -->
+      <line x1="268" y1="40" x2="258" y2="68" stroke="#8b949e" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="283" y1="40" x2="273" y2="68" stroke="#8b949e" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="298" y1="40" x2="288" y2="68" stroke="#f85149" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7"/>
+      <text x="380" y="36" font-size="8" fill="#484f58" font-family="monospace">&#8593; cables a vivienda</text>
+
+      <!-- REF.9695 block -->
+      <rect x="45" y="78" width="285" height="205" rx="4" fill="#0d1f3c" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="187" y="153" text-anchor="middle" font-size="11" font-weight="bold" fill="#58a6ff" font-family="monospace">REF.9695</text>
+      <text x="187" y="170" text-anchor="middle" font-size="8.5" fill="#8b949e" font-family="monospace">placa electr&#243;nica extraíble</text>
+      <!-- Terminal block -->
+      <rect x="65" y="253" width="245" height="22" rx="2" fill="#0a1a0a" stroke="#2ea043" stroke-width="1"/>
+      <text x="92"  y="268" font-size="9.5" fill="#58a6ff"  font-family="monospace">J</text>
+      <text x="140" y="268" font-size="9.5" fill="#3fb950"  font-family="monospace">Ab</text>
+      <text x="190" y="268" font-size="9.5" fill="#f85149"  fill-opacity="0.8" font-family="monospace">~~</text>
+      <text x="238" y="268" font-size="8"   fill="#484f58"  font-family="monospace">1 2 3 6</text>
+      <text x="187" y="288" text-anchor="middle" font-size="8" fill="#3fb950" font-family="monospace">bloque terminales verde</text>
+
+      <!-- ZONA A (right lateral strip) -->
+      <rect x="345" y="78" width="148" height="205" rx="3" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+      <text x="419" y="97"  text-anchor="middle" font-size="9"   fill="#8b949e" font-family="monospace">ZONA A</text>
+      <text x="419" y="110" text-anchor="middle" font-size="8"   fill="#6e7681" font-family="monospace">~4&#215;12cm</text>
+      <!-- PC817 in ZONA A -->
+      <rect x="354" y="117" width="130" height="68" rx="2" fill="#0d1f3c" stroke="#58a6ff" stroke-width="1.2" stroke-dasharray="4,3"/>
+      <text x="419" y="149" text-anchor="middle" font-size="9"   fill="#58a6ff" font-family="monospace">M&#243;dulo PC817</text>
+      <text x="419" y="163" text-anchor="middle" font-size="7.5" fill="#6e7681" font-family="monospace">35&#215;22mm</text>
+      <!-- Relay in ZONA A -->
+      <rect x="354" y="193" width="130" height="75" rx="2" fill="#0d2818" stroke="#3fb950" stroke-width="1.2" stroke-dasharray="4,3"/>
+      <text x="419" y="226" text-anchor="middle" font-size="9"   fill="#3fb950" font-family="monospace">Rel&#233; 5V</text>
+      <text x="419" y="241" text-anchor="middle" font-size="7.5" fill="#6e7681" font-family="monospace">50&#215;26mm</text>
+
+      <!-- ZONA B (perfboard, bottom) -->
+      <rect x="45" y="305" width="555" height="120" rx="3" fill="#0a1f0a" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="7,4"/>
+      <text x="320" y="299" text-anchor="middle" font-size="9" fill="#3fb950" font-family="monospace">ZONA B &#8212; perfboard 10&#215;8cm (detr&#225;s del REF.9695)</text>
+      <!-- Pi Zero -->
+      <rect x="57" y="314" width="200" height="83" rx="3" fill="#0d1f3c" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="157" y="352" text-anchor="middle" font-size="10" font-weight="bold" fill="#58a6ff" font-family="monospace">Pi Zero W</text>
+      <text x="157" y="367" text-anchor="middle" font-size="8"  fill="#6e7681" font-family="monospace">65&#215;30mm</text>
+      <rect x="256" y="322" width="8" height="67" rx="1" fill="#484f58"/>
+      <!-- Buck -->
+      <rect x="272" y="314" width="103" height="83" rx="3" fill="#2a1a08" stroke="#ffa657" stroke-width="1.5"/>
+      <text x="323" y="352" text-anchor="middle" font-size="10" fill="#ffa657" font-family="monospace">Buck</text>
+      <text x="323" y="367" text-anchor="middle" font-size="8"  fill="#ffa657" font-family="monospace">12Vac&#8594;5Vdc 3A</text>
+      <!-- Free space -->
+      <rect x="384" y="314" width="208" height="83" rx="2" fill="none" stroke="#21262d" stroke-width="1" stroke-dasharray="4,4"/>
+      <text x="488" y="358" text-anchor="middle" font-size="8" fill="#484f58" font-family="monospace">espacio libre</text>
+
+      <!-- Camera hole indicator -->
+      <circle cx="157" cy="455" r="15" fill="#0d1117" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="157" y="460" text-anchor="middle" font-size="10">&#128247;</text>
+      <text x="220" y="452" font-size="7.5" fill="#58a6ff" font-family="monospace">agujero &#8960;25mm</text>
+      <text x="220" y="464" font-size="7.5" fill="#484f58" font-family="monospace">taladrar en frontal</text>
+    </svg>
+  </div>
+
+  <!-- ── Diagrama 3: Detalle aislamiento ── -->
+  <p class="diagram-label">3 &mdash; Detalle aislamiento &#8212; kapton + separadores nylon M3 (secci&#243;n lateral)</p>
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 620 250" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="0" width="620" height="250" fill="#0d1117"/>
+
+      <!-- Layer labels -->
+      <text x="90"  y="22" text-anchor="middle" font-size="8.5" fill="#58a6ff"  font-family="monospace">Pi Zero W</text>
+      <text x="222" y="22" text-anchor="middle" font-size="8.5" fill="#3fb950"  font-family="monospace">Perfboard</text>
+      <text x="350" y="22" text-anchor="middle" font-size="8.5" fill="#8b949e"  font-family="monospace">Nylon M3 10mm</text>
+      <text x="468" y="22" text-anchor="middle" font-size="8.5" fill="#e3b341"  font-family="monospace">Kapton ×2</text>
+      <text x="552" y="22" text-anchor="middle" font-size="8.5" fill="#555"     font-family="monospace">Caja met.</text>
+
+      <!-- Pi Zero -->
+      <rect x="20" y="40" width="140" height="140" rx="3" fill="#0d1f3c" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="90" y="115" text-anchor="middle" font-size="9" fill="#58a6ff" font-family="monospace">Pi Zero W</text>
+
+      <!-- Perfboard -->
+      <rect x="163" y="30" width="28" height="160" rx="2" fill="#0a1f0a" stroke="#3fb950" stroke-width="1.5"/>
+      <text x="177" y="115" text-anchor="middle" font-size="7.5" fill="#3fb950" font-family="monospace"
+            transform="rotate(-90,177,115)">perfboard</text>
+
+      <!-- Nylon standoff gap with circles -->
+      <rect x="196" y="30" width="100" height="160" rx="2" fill="none" stroke="#21262d" stroke-width="0.8" stroke-dasharray="4,3"/>
+      <circle cx="212" cy="50"  r="7" fill="#161b22" stroke="#8b949e" stroke-width="1.5"/>
+      <circle cx="280" cy="50"  r="7" fill="#161b22" stroke="#8b949e" stroke-width="1.5"/>
+      <circle cx="212" cy="170" r="7" fill="#161b22" stroke="#8b949e" stroke-width="1.5"/>
+      <circle cx="280" cy="170" r="7" fill="#161b22" stroke="#8b949e" stroke-width="1.5"/>
+      <text x="246" y="116" text-anchor="middle" font-size="8" fill="#8b949e" font-family="monospace">10mm</text>
+
+      <!-- Kapton layers (2) -->
+      <rect x="300" y="30" width="13" height="160" fill="#e3b341" opacity="0.75"/>
+      <rect x="316" y="30" width="11" height="160" fill="#e3b341" opacity="0.45"/>
+
+      <!-- Metal box wall -->
+      <rect x="331" y="25" width="58" height="170" rx="2" fill="#1a1a1a" stroke="#555" stroke-width="2"/>
+      <text x="360" y="115" text-anchor="middle" font-size="8.5" fill="#555" font-family="monospace"
+            transform="rotate(-90,360,115)">CAJA MET&#193;LICA</text>
+
+      <!-- Note -->
+      <text x="310" y="218" text-anchor="middle" font-size="7.5" fill="#6e7681" font-family="monospace">
+        La caja met&#225;lica est&#225; a potencial Fermax &#8212; aislar con kapton antes de introducir la perfboard
+      </text>
+    </svg>
+  </div>
+
+  <!-- Safety warnings -->
+  <div class="safety-box">
+    <b>&#9888; Escenario A &mdash; Advertencias de seguridad:</b><br>
+    &#9658; El convertidor buck recibe 12Vac &#8212; verificar que el modelo elegido acepta entrada <b>AC</b>, no solo DC.<br>
+    &#9658; <b>NUNCA</b> alimentar la Pi Zero por USB y por el buck simult&#225;neamente &#8212; dos fuentes da&#241;an la Pi.<br>
+    &#9658; Cubrir todas las superficies interiores de la caja met&#225;lica con kapton antes de introducir la perfboard.<br>
+    &#9658; El REF.9695 tiene 12Vac expuestos en los terminales &#8212; no tocar con la perfboard encendida.<br>
+    &#9658; Medir ZONA A y ZONA B f&#237;sicamente antes de comprar la perfboard &#8212; las cotas son estimaciones.<br>
+    &#9658; Los cables existentes pueden tener el aislante deteriorado &#8212; cubrir con kapton antes de montar.
+  </div>
+
+  <!-- BOM Escenario A -->
+  <div class="bom-wrap">
+    <p class="diagram-label">BOM &#8212; Escenario A (montaje en caja Fermax)</p>
+    <table class="bom-table">
+      <thead>
+        <tr><th>Componente</th><th>Medida / Referencia</th><th>D&#243;nde</th><th>Precio</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Hammer Header macho 2&#215;20 + jig</td><td>Pimoroni PIM296</td><td>pimoroni.com</td><td>~8&#8364;</td></tr>
+        <tr><td>M&#243;dulo PC817 optoacoplador</td><td>bornes tornillo + Dupont</td><td>Amazon.es</td><td>~7&#8364;</td></tr>
+        <tr><td>M&#243;dulo rel&#233; 5V 1 canal optoacoplado</td><td>SRD-05VDC-SL-C</td><td>Amazon.es</td><td>~5&#8364;</td></tr>
+        <tr><td>Convertidor buck 12Vac&#8594;5V 3A</td><td>MP1584 o similar (entrada AC)</td><td>Amazon.es</td><td>~4&#8364;</td></tr>
+        <tr><td>Perfboard 10&#215;8cm</td><td>doble cara preferible</td><td>Amazon.es</td><td>~2&#8364;</td></tr>
+        <tr><td>Separadores nylon M3 &#215;8 + tornillos</td><td>10mm altura</td><td>Amazon.es</td><td>~2&#8364;</td></tr>
+        <tr><td>Cinta Kapton 25mm</td><td>rollo peque&#241;o</td><td>Amazon.es</td><td>~3&#8364;</td></tr>
+        <tr><td>Cables Dupont hembra-hembra 40p</td><td>20cm TECHZOCO</td><td>Amazon.es</td><td>~6.50&#8364;</td></tr>
+        <tr><td>Silicona neutra transparente</td><td>tubo peque&#241;o</td><td>ferreter&#237;a</td><td>~3&#8364;</td></tr>
+        <tr class="bom-total"><td colspan="3"><strong>Total Escenario A</strong></td><td><strong>~40.50&#8364;</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
 </body>
 </html>
